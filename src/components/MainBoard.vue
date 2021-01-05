@@ -1,7 +1,7 @@
 <template>
   <draggable :list="listArray" item-key="name" handle=".handle" class="row">
     <template #item="{ element }">
-      <div>
+      <div class="board">
         <div class="card">
           <h2 class="handle">{{ element.name }}</h2>
           <draggable :list="element.value" item-key="name" group="people">
