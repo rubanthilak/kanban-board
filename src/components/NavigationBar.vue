@@ -1,7 +1,7 @@
 <template>
     <div>
         <h1>📚 Kanban Board</h1>
-        <button>Add Card</button>
+        <button>Add Board</button>
     </div>
 </template>
 
@@ -23,7 +23,7 @@
         float: right;
         padding: 10px 25px;
         margin: 10px 0px;
-        background-color: rgb(228, 87, 141);
+        background-color: #e4578d;
         color: white;
         font-family: "Circular Std Bold";
         font-size: 16px;
