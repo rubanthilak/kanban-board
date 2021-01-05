@@ -1,82 +1,92 @@
 <template>
-    <div class="row">
-        <draggable
-        :list="listArray"
-        item-key="name"
-        @start="dragging = true"
-        @end="dragging = false"
-        >
-         <template #item="{ element }">
-          <div class="column">
-            <h3>{{ element.name }}</h3>
-            <draggable
-             :list="element.value"
-             item-key="name"
-             group="people"
-            >
-             <template #item="{ element, index }">
-                 <div>
-                     {{ element.name }} {{ index }}
-                 </div>
-             </template>
-            </draggable>
-          </div>
-        </template>
-        </draggable>
-    </div>
+  <draggable :list="listArray" item-key="name" handle=".handle" class="row">
+    <template #item="{ element }">
+      <div>
+        <div class="card">
+          <h2 class="handle">{{ element.name }}</h2>
+          <draggable :list="element.value" item-key="name" group="people">
+            <template #item="{ element }">
+              <div class="list-item">{{ element.name }}</div>
+            </template>
+          </draggable>
+        </div>
+      </div>
+    </template>
+  </draggable>
 </template>
 
 <script>
 import draggable from "vuedraggable";
 export default {
-    components:{
-        draggable
-    },
-    data() {
+  components: {
+    draggable,
+  },
+  data() {
     return {
-      dragging: false,
-      listArray : [
+      listArray: [
         {
-            name: "List 1",
-            dragging: false,
-            value : [
-                { name: "John", id: 1 },
-                { name: "Joao", id: 2 },
-                { name: "Jean", id: 3 },
-                { name: "Gerard", id: 4 } 
-            ]
+          name: "List 1",
+          value: [
+            { name: "John", id: 1 },
+            { name: "Joao", id: 2 },
+            { name: "Jean", id: 3 },
+            { name: "Gerard", id: 4 },
+          ],
         },
         {
-           name: "List 2",
-           dragging: false,
-           value: [
-                { name: "Juan", id: 5 },
-                { name: "Edgard", id: 6 },
-                { name: "Johnson", id: 7 }
-           ]
-        }
-      ]
+          name: "List 2",
+          value: [
+            { name: "Juan", id: 5 },
+            { name: "Edgard", id: 6 },
+            { name: "Johnson", id: 7 },
+          ],
+        },
+        {
+          name: "List 3",
+          value: [
+            { name: "Juan", id: 5 },
+            { name: "Edgard", id: 6 },
+            { name: "Johnson", id: 7 },
+          ],
+        },
+      ],
     };
   },
-}
+};
 </script>
 
 <style scoped>
+.row {
+  width: auto;
+  height: calc(100vh - 110px);
+  padding: 24px;
+  display: flex;
+  flex-direction: row;
+  overflow-x: scroll;
+}
 
-    .row div{
-        display: flex;
-        flex-direction: row;
-        margin: 25px;
-    }
+h2 {
+  cursor: pointer;
+  margin: 0px;
+}
 
-    .row > div > div {
-        flex-direction: column;
-        cursor: pointer;
-        margin: 0px;
-    }
+.card {
+  box-shadow: 0px 0px 15px #22222227;
+  padding: 25px;
+  background: white;
+  margin-right: 25px;
+  margin-bottom: 25px;
+  min-width: 250px;
+  float: left;
+}
 
-    .column div{
-        display: flex;
-        flex-direction: column;
-    }
+.list-item {
+  padding: 20px 15px;
+  margin: 10px 0px;
+  box-shadow: 0px 0px 10px #2222221e;
+  border-radius: 3px;
+  cursor: pointer;
+  background: white;
+}
+
 </style>

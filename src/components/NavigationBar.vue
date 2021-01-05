@@ -1,16 +1,17 @@
 <template>
     <div>
         <h1>📚 Kanban Board</h1>
-        <button>Add Board</button>
+        <button>Add Card</button>
     </div>
 </template>
 
 <style scoped>
     div{
-        width: calc( 100% - 50px);
+        width: calc( 100vw - 50px);
         height: 60px;
         box-shadow: 1px 5px 15px #8888888a;
         padding: 0px 25px;
+        background: white;
     }
     h1{
         font-family: "Circular Std Bold";
