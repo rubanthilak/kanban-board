@@ -1,9 +1,19 @@
 <template>
     <div>
-        <h1>📚 Kanban Board</h1>
-        <button>Add Board</button>
+        <h1>📚 Sticky Notes</h1>
+        <button @click="addBoard">+</button>
     </div>
 </template>
+<script>
+export default {
+    emits: ['addBoard'],
+    methods: {
+        addBoard(){
+            this.$emit("addBoard")
+        }
+    }
+}
+</script>
 
 <style scoped>
     div{
@@ -17,18 +27,19 @@
         font-family: "Circular Std Bold";
         margin: 0px;
         line-height: 60px;
+        font-size: 24px;
         float: left;
     }
     button {
         float: right;
-        padding: 10px 25px;
+        padding: 5px 13px;
         margin: 10px 0px;
         background-color: #e4578d;
         color: white;
         font-family: "Circular Std Bold";
-        font-size: 16px;
+        font-size: 24px;
         border: none;
-        border-radius: 3px;
+        border-radius: 100%;
         outline: none;
         cursor: pointer;
         box-shadow: 0px 2px 8px #4141415b;

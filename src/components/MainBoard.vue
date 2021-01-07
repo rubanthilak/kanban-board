@@ -1,10 +1,12 @@
 <template>
   <draggable
-    :list="listArray"
+    v-model="listArray"
     item-key="name"
     handle=".handle"
     class="row"
     ghost-class="ghost"
+    drag-class="drag"
+    :force-fallback="true"
   >
     <template #item="{ element }">
       <div class="board">
@@ -12,17 +14,19 @@
           <h2 class="handle">{{ element.name }}</h2>
           <draggable
             :list="element.value"
-            item-key="name"
-            group="people"
+            item-key="id"
+            group="board"
             drag-class="drag"
             ghost-class="ghost"
           >
             <template #item="{ element }">
-              <div class="list-item">{{ element.name }}</div>
+              <div class="list-item" @click="viewCard(element)">
+                <p>{{ resizeNameLength(element.name) }}</p>
+                </div>
             </template>
           </draggable>
-          <div class="add-card-button">
-              <p><span>+</span> Add Card</p>
+          <div @click="newCard(element.id)" class="add-card-button">
+            <p><span>+</span> Add Card</p>
           </div>
         </div>
       </div>
@@ -33,51 +37,39 @@
 <script>
 import draggable from "vuedraggable";
 export default {
+  inject: ["listArray"],
   components: {
     draggable,
   },
-  data() {
-    return {
-      listArray: [
-        {
-          name: "List 1",
-          value: [
-            { name: "John", id: 1 },
-            { name: "Joao", id: 2 },
-            { name: "Jean", id: 3 },
-            { name: "Gerard", id: 4 },
-          ],
-        },
-        {
-          name: "List 2",
-          value: [
-            { name: "Juan", id: 5 },
-            { name: "Edgard", id: 6 },
-            { name: "Johnson", id: 7 },
-          ],
-        },
-        {
-          name: "List 3",
-          value: [
-            { name: "Juan", id: 5 },
-            { name: "Edgard", id: 6 },
-            { name: "Johnson", id: 7 },
-          ],
-        },
-      ],
-    };
-  },
+  methods: {
+    newCard(id){
+      this.$emit('newCard',id);
+    },
+    viewCard(card){
+      this.$emit('viewCard',card);
+    },
+    resizeNameLength(name){
+      if(name.length > 70){
+        return name.substring(0,70) + "..."
+      }
+      return name;
+    }
+  }
 };
 </script>
 
 <style scoped>
 .row {
   width: auto;
-  height: calc(100vh - 110px);
+  min-height: calc(100vh - 110px);
   padding: 24px;
   display: flex;
   flex-direction: row;
   overflow-x: scroll;
+}
+
+p{
+  margin: 0px;
 }
 
 h2 {
@@ -92,6 +84,7 @@ h2 {
   margin-right: 25px;
   margin-bottom: 25px;
   min-width: 250px;
+  max-width: 250px;
   float: left;
 }
 
@@ -99,39 +92,34 @@ h2 {
   padding: 20px 15px;
   margin: 10px 0px;
   box-shadow: 0px 0px 10px #2222221e;
-  border-radius: 5px;
+  border-radius: 7px;
   cursor: pointer;
   background: #000000;
   color: white;
+  word-wrap: break-word;
 }
 
-.add-card-button{
-    padding: 10px;
-    border-style: dashed;
-    border-color:#5050507a;
-    border-width: 2px;
-    color:#5050507a;
-    border-radius: 5px;
-    font-family: "Circular Std Bold";
-    cursor: pointer;
-    transition-delay: 0.15s;
+.add-card-button {
+  padding: 8px;
+  border-style: dashed;
+  border-color: #5050507a;
+  border-width: 2px;
+  color: #5050507a;
+  border-radius: 5px;
+  font-family: "Circular Std Bold";
+  cursor: pointer;
 }
 
-.add-card-button p{
-    margin: 0px;
-}
-
-.add-card-button:hover{
-    border-color:#e4578d;
-    color:#e4578d;
+.add-card-button p {
+  margin: 0px;
 }
 
 .ghost {
-   opacity: 0;
+  opacity: 0;
 }
 
-.drag {
-   opacity: 1;
+.drag,
+.sortable-drag {
+  opacity: 1;
 }
-
 </style>
