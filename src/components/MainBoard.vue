@@ -1,7 +1,7 @@
 <template>
   <draggable
-    v-model="listArray"
-    item-key="name"
+    :list="listArray"
+    item-key="id"
     handle=".handle"
     class="row"
     ghost-class="ghost"
@@ -13,16 +13,22 @@
         <div class="card">
           <h2 class="handle">{{ element.name }}</h2>
           <draggable
-            :list="element.value"
+            v-model="element.value"
             item-key="id"
-            group="board"
-            drag-class="drag"
-            ghost-class="ghost"
+            tag="transition-group"
+            :component-data="{
+              tag: 'div',
+              type: 'transition-group',
+              name: !drag ? 'flip-list' : null,
+            }"
+            v-bind="dragOptions"
+            @start="drag = true"
+            @end="drag = false"
           >
             <template #item="{ element }">
               <div class="list-item" @click="viewCard(element)">
                 <p>{{ resizeNameLength(element.name) }}</p>
-                </div>
+              </div>
             </template>
           </draggable>
           <div @click="newCard(element.id)" class="add-card-button">
@@ -41,18 +47,36 @@ export default {
   components: {
     draggable,
   },
+  data(){
+    return {
+      drag: false
+    }
+  },
   methods: {
-    newCard(id){
-      this.$emit('newCard',id);
+    newCard(id) {
+      this.$emit("newCard", id);
     },
-    viewCard(card){
-      this.$emit('viewCard',card);
+    viewCard(card) {
+      this.$emit("viewCard", card);
     },
-    resizeNameLength(name){
-      if(name.length > 70){
-        return name.substring(0,70) + "..."
+    resizeNameLength(name) {
+      if (name.length > 70) {
+        return name.substring(0, 70) + "...";
       }
       return name;
+    },
+    printList(){
+      console.log(this.listArray);
+    }
+  },
+   computed: {
+    dragOptions() {
+      return {
+        animation: 200,
+        group: "board",
+        disabled: false,
+        ghostClass: "ghost"
+      };
     }
   }
 };
@@ -68,7 +92,7 @@ export default {
   overflow-x: scroll;
 }
 
-p{
+p {
   margin: 0px;
 }
 
@@ -114,12 +138,21 @@ h2 {
   margin: 0px;
 }
 
-.ghost {
-  opacity: 0;
-}
-
 .drag,
 .sortable-drag {
   opacity: 1;
 }
+
+.flip-list-move {
+  transition: transform 0s;
+}
+
+.no-move {
+  transition: transform 0.3s;
+}
+
+.ghost {
+  opacity: 0;
+}
+
 </style>
