@@ -15,15 +15,9 @@
           <draggable
             v-model="element.value"
             item-key="id"
-            tag="transition-group"
-            :component-data="{
-              tag: 'div',
-              type: 'transition-group',
-              name: !drag ? 'flip-list' : null,
-            }"
-            v-bind="dragOptions"
-            @start="drag = true"
-            @end="drag = false"
+            group= "board"
+            ghost-class="ghost"
+            drag-class="drag"
           >
             <template #item="{ element }">
               <div class="list-item" @click="viewCard(element)">
@@ -65,20 +59,7 @@ export default {
       }
       return name;
     },
-    printList(){
-      console.log(this.listArray);
-    }
   },
-   computed: {
-    dragOptions() {
-      return {
-        animation: 200,
-        group: "board",
-        disabled: false,
-        ghostClass: "ghost"
-      };
-    }
-  }
 };
 </script>
 
@@ -110,6 +91,7 @@ h2 {
   min-width: 250px;
   max-width: 250px;
   float: left;
+  transition: 0.5s;
 }
 
 .list-item {
@@ -143,15 +125,7 @@ h2 {
   opacity: 1;
 }
 
-.flip-list-move {
-  transition: transform 0s;
-}
-
-.no-move {
-  transition: transform 0.3s;
-}
-
-.ghost {
+.ghost, .sortable-ghost {
   opacity: 0;
 }
 
