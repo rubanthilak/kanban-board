@@ -3,18 +3,15 @@
     :board-id="newCardParentId"
     v-if="newCardVisible"
   ></new-card-popup>
-  <view-card-popup
-    :card="viewCard"
-    v-if="viewCardVisible"
-  ></view-card-popup>
+  <view-card-popup :card="viewCard" v-if="viewCardVisible"></view-card-popup>
   <new-board-popup
     :newBoardTitle="'New Board'"
     v-if="newBoardVisible"
   ></new-board-popup>
-  <navigation-bar @add-board="toggleNewBoard"></navigation-bar>
-  <main-board 
-  @new-card="toggleNewCard($event)"
-  @view-card="toggleViewCard($event)"
+  <h1>Sticky Notes</h1>
+  <main-board
+    @new-card="toggleNewCard($event)"
+    @view-card="toggleViewCard($event)"
   ></main-board>
 </template>
 
@@ -29,7 +26,7 @@ export default {
       toggleViewCard: this.toggleViewCard,
       createNewBoard: this.createNewBoard,
       createNewCard: this.createNewCard,
-      updateCardDetails: this.updateCardDetails
+      updateCardDetails: this.updateCardDetails,
     };
   },
   data() {
@@ -42,17 +39,17 @@ export default {
       listArray: [
         {
           id: 1,
-          name: "List 1",
+          name: "Things to do",
           value: [
             { name: "John", id: 1, description: "Hello" },
             { name: "Joao", id: 2, description: "Hello" },
             { name: "Jean", id: 3, description: "Hello" },
-            { name: "Gerard", id: 4, description: "Hello"  },
+            { name: "Gerard", id: 4, description: "Hello" },
           ],
         },
         {
           id: 2,
-          name: "List 2",
+          name: "On Progress",
           value: [
             { name: "Juan", id: 5, description: "Hello" },
             { name: "Edgard", id: 6, description: "Hello" },
@@ -61,7 +58,7 @@ export default {
         },
         {
           id: 3,
-          name: "List 3",
+          name: "Completed",
           value: [
             { name: "Juan", id: 8, description: "Hello" },
             { name: "Edgard", id: 9, description: "Hello" },
@@ -100,16 +97,16 @@ export default {
       this.newCardVisible = !this.newCardVisible;
       this.newCardParentId = null;
     },
-    updateCardDetails(params){
+    updateCardDetails(params) {
       this.listArray.forEach((board) => {
-        const index = board.value.findIndex(card => card.id === params.id);
-        if(index !== -1){
+        const index = board.value.findIndex((card) => card.id === params.id);
+        if (index !== -1) {
           board.value[index] = params;
         }
-      })  
-      this.viewCardVisible= false;
+      });
+      this.viewCardVisible = false;
       this.viewCard = null;
-    }
+    },
   },
 };
 </script>
@@ -124,6 +121,10 @@ body {
   margin: 0px;
   padding: 0px;
   background: #f8f8f8;
-  overflow-x: hidden;
+}
+h1{
+  font-family: "Circular Std Bold";
+  margin-left: 25px;
+  margin-bottom: 0px;
 }
 </style>

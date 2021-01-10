@@ -11,7 +11,7 @@
     <template #item="{ element }">
       <div class="board">
         <div class="card">
-          <h2 class="handle">{{ element.name }}</h2>
+          <h4 class="handle">{{ element.name }}</h4>
           <draggable
             v-model="element.value"
             item-key="id"
@@ -70,21 +70,22 @@ export default {
   padding: 24px;
   display: flex;
   flex-direction: row;
-  overflow-x: scroll;
 }
 
 p {
   margin: 0px;
 }
 
-h2 {
+h4 {
   cursor: pointer;
   margin: 0px;
+  font-size: 18px;
+  font-family: "Circular Std Bold";
 }
 
 .card {
   box-shadow: 0px 0px 15px #22222227;
-  padding: 25px;
+  padding: 20px;
   background: white;
   margin-right: 25px;
   margin-bottom: 25px;
@@ -92,17 +93,18 @@ h2 {
   max-width: 250px;
   float: left;
   transition: 0.5s;
+  border-radius: 5px;
 }
 
 .list-item {
   padding: 20px 15px;
   margin: 10px 0px;
   box-shadow: 0px 0px 10px #2222221e;
-  border-radius: 7px;
   cursor: pointer;
   background: #000000;
   color: white;
   word-wrap: break-word;
+  border-radius: 5px;
 }
 
 .add-card-button {
