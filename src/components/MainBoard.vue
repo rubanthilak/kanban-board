@@ -10,8 +10,8 @@
   >
     <template #item="{ element }">
       <div class="board">
+        <h4 class="handle">{{ element.name }}</h4>
         <div class="card">
-          <h4 class="handle">{{ element.name }}</h4>
           <draggable
             v-model="element.value"
             item-key="id"
@@ -20,13 +20,13 @@
             drag-class="drag"
           >
             <template #item="{ element }">
-              <div class="list-item" @click="viewCard(element)">
+              <div class="list-item" @click="viewCard(element.id)">
                 <p>{{ resizeNameLength(element.name) }}</p>
               </div>
             </template>
           </draggable>
           <div @click="newCard(element.id)" class="add-card-button">
-            <p><span>+</span> Add Card</p>
+            <p><span>+</span> Add Task</p>
           </div>
         </div>
       </div>
@@ -48,10 +48,10 @@ export default {
   },
   methods: {
     newCard(id) {
-      this.$emit("newCard", id);
+      this.$emit("newCard",id);
     },
-    viewCard(card) {
-      this.$emit("viewCard", card);
+    viewCard(id) {
+      this.$emit("viewCard",id);
     },
     resizeNameLength(name) {
       if (name.length > 70) {
@@ -66,10 +66,11 @@ export default {
 <style scoped>
 .row {
   width: auto;
-  min-height: calc(100vh - 110px);
-  padding: 24px;
+  min-height: calc(100vh - 335px);
+  padding: 25px;
   display: flex;
   flex-direction: row;
+  margin-top: 270px;
 }
 
 p {
@@ -79,47 +80,50 @@ p {
 h4 {
   cursor: pointer;
   margin: 0px;
-  font-size: 18px;
+  font-size: 20px;
   font-family: "Circular Std Bold";
+  margin-bottom: 15px;
+  line-height: 24px;
 }
 
 .card {
-  box-shadow: 0px 0px 15px #22222227;
   padding: 20px;
-  background: white;
+  background: #f4f7fd;
   margin-right: 25px;
   margin-bottom: 25px;
-  min-width: 250px;
-  max-width: 250px;
+  min-width: 220px;
+  max-width: 220px;
   float: left;
   transition: 0.5s;
-  border-radius: 5px;
+  border-radius: 10px;
 }
 
 .list-item {
-  padding: 20px 15px;
-  margin: 10px 0px;
-  box-shadow: 0px 0px 10px #2222221e;
+  padding: 10px 15px;
+  margin: 0px 0px 15px 0px;
+  box-shadow: 0px 0px 10px #b8b8b82a;
   cursor: pointer;
-  background: #000000;
-  color: white;
+  background: white;
+  color: black;
   word-wrap: break-word;
   border-radius: 5px;
 }
 
 .add-card-button {
   padding: 8px;
-  border-style: dashed;
-  border-color: #5050507a;
-  border-width: 2px;
-  color: #5050507a;
+  background: #E5EBF7;
+  color: #E5EBF7;
   border-radius: 5px;
   font-family: "Circular Std Bold";
   cursor: pointer;
+  text-align: center;
+  margin-top: 15px;
 }
 
 .add-card-button p {
   margin: 0px;
+  text-align: center;
+  color: #2674fa;
 }
 
 .drag,

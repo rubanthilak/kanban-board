@@ -1,18 +1,9 @@
 <template>
-  <new-card-popup
-    :board-id="newCardParentId"
-    v-if="newCardVisible"
-  ></new-card-popup>
-  <view-card-popup :card="viewCard" v-if="viewCardVisible"></view-card-popup>
-  <new-board-popup
-    :newBoardTitle="'New Board'"
-    v-if="newBoardVisible"
-  ></new-board-popup>
-  <h1>Sticky Notes</h1>
-  <main-board
-    @new-card="toggleNewCard($event)"
-    @view-card="toggleViewCard($event)"
-  ></main-board>
+  <new-board-popup :open="currentPopup === 'new-board-popup'"></new-board-popup>
+  <new-card-popup :open="currentPopup === 'new-card-popup'"></new-card-popup>
+  <view-card-popup :open="currentPopup === 'view-card-popup'"></view-card-popup>
+  <top-bar @add-board="openPopup('new-board-popup')"></top-bar>
+  <main-board @new-card="openPopup('new-card-popup',$event)" @view-card="openPopup('view-card-popup',$event)"></main-board>
 </template>
 
 <script>
@@ -21,25 +12,27 @@ export default {
   provide() {
     return {
       listArray: this.listArray,
-      toggleNewBoard: this.toggleNewBoard,
-      toggleNewCard: this.toggleNewCard,
-      toggleViewCard: this.toggleViewCard,
+      //methods
       createNewBoard: this.createNewBoard,
       createNewCard: this.createNewCard,
       updateCardDetails: this.updateCardDetails,
+      openPopup: this.openPopup,
+      closePopup: this.closePopup,
+      //params for popup
+      currentCardId: this.currentCardId,
+      addToBoardId: this.addToBoardId
     };
   },
   data() {
     return {
-      newBoardVisible: false,
-      newCardVisible: false,
-      viewCardVisible: false,
-      newCardParentId: null,
-      viewCard: null,
+      currentCardId: 1,
+      addToBoardId: null,
+      currentPopup: null,
+      renderKey: 0,
       listArray: [
         {
           id: 1,
-          name: "Things to do",
+          name: "Things to do  🚀",
           value: [
             { name: "John", id: 1, description: "Hello" },
             { name: "Joao", id: 2, description: "Hello" },
@@ -49,7 +42,7 @@ export default {
         },
         {
           id: 2,
-          name: "On Progress",
+          name: "On Progress ...",
           value: [
             { name: "Juan", id: 5, description: "Hello" },
             { name: "Edgard", id: 6, description: "Hello" },
@@ -58,7 +51,7 @@ export default {
         },
         {
           id: 3,
-          name: "Completed",
+          name: "Completed 🎈",
           value: [
             { name: "Juan", id: 8, description: "Hello" },
             { name: "Edgard", id: 9, description: "Hello" },
@@ -69,33 +62,37 @@ export default {
     };
   },
   methods: {
-    toggleNewBoard() {
-      this.newBoardVisible = !this.newBoardVisible;
+    rerender(){
+      this.renderKey +=1
     },
-    toggleNewCard(value) {
-      this.newCardVisible = !this.newCardVisible;
-      this.newCardParentId = value;
+    openPopup(popup,params){
+      if(popup === "new-card-popup"){
+        this.addToBoardId = params
+      }
+      else if(popup === "view-card-popup"){
+        this.currentCardId = params
+        this.rerender();
+      }
+      this.currentPopup= popup;
     },
-    toggleViewCard(card) {
-      this.viewCardVisible = !this.viewCardVisible;
-      this.viewCard = card;
+    closePopup(){
+      this.currentPopup= null;
     },
     createNewBoard(name) {
       this.listArray.push({
         name: name,
         value: [],
       });
-      this.newBoardVisible = !this.newBoardVisible;
+      this.closePopup();
     },
-    createNewCard(boardId, title, des) {
-      const selectedItem = this.listArray.find((board) => board.id === boardId);
+    createNewCard(title, des) {
+      const selectedItem = this.listArray.find((board) => board.id === this.addToBoardId);
       selectedItem.value.push({
         id: Date.now().toString(),
         name: title,
         description: des,
       });
-      this.newCardVisible = !this.newCardVisible;
-      this.newCardParentId = null;
+      this.closePopup();
     },
     updateCardDetails(params) {
       this.listArray.forEach((board) => {
@@ -104,8 +101,7 @@ export default {
           board.value[index] = params;
         }
       });
-      this.viewCardVisible = false;
-      this.viewCard = null;
+      this.closePopup();
     },
   },
 };
@@ -120,11 +116,12 @@ export default {
 body {
   margin: 0px;
   padding: 0px;
-  background: #f8f8f8;
+  background: #ffffff;
 }
-h1{
+h1 {
   font-family: "Circular Std Bold";
   margin-left: 25px;
   margin-bottom: 0px;
 }
+
 </style>

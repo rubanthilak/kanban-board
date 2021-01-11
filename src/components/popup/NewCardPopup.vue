@@ -1,5 +1,5 @@
 <template>
-  <the-dialog-box :title="'New Card'" @close="toggleNewCard">
+  <the-popup :title="'New Card'" @close="closePopup" :open="open">
     <template #default>
       <input type="text" v-model="newCardTitle" placeholder="Title"/>
       <textarea v-model="newCardDesc" placeholder="Description" rows="5"></textarea>
@@ -7,15 +7,15 @@
     </template>
     <template #actions>
       <button class="add-btn" @click="ValidateNewCard">Add</button>
-      <button class="close-btn" @click="toggleNewCard">Cancel</button>
+      <button class="close-btn" @click="closePopup">Cancel</button>
     </template>
-  </the-dialog-box>
+  </the-popup>
 </template>
 
 <script>
 export default {
-  inject: ["createNewCard", "toggleNewCard"],
-  props:["boardId"],
+  inject: ["createNewCard", "closePopup",],
+  props:["open"],
   data(){
       return {
           newCardTitle: "",
@@ -29,7 +29,7 @@ export default {
               this.showError= true;
           }
           else{
-              this.createNewCard(this.boardId,this.newCardTitle,this.newCardDesc);
+              this.createNewCard(this.newCardTitle, this.newCardDesc);
           }
       }
   }
@@ -69,11 +69,10 @@ button {
   border-radius: 5px;
   outline: none;
   cursor: pointer;
-  box-shadow: 0px 0px 8px #4141415b;
 }
 
 .add-btn {
-  background: black;
+  background: #2674fa;
 }
 
 .close-btn {

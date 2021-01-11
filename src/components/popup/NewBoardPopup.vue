@@ -1,20 +1,20 @@
 <template>
-  <the-dialog-box :title="newBoardTitle" @close="toggleNewBoard">
+ <the-popup :title="'New Board'" @close="closePopup" :open="open">
     <template #default>
       <input v-model="newBoardName" type="text" placeholder="Title" />
       <p class="error-text" v-show="showError">* Title require 👿</p>
     </template>
     <template #actions>
       <button class="add-btn" @click="validateBoardName">Create</button>
-      <button class="close-btn" @click="toggleNewBoard">Cancel</button>
+      <button class="close-btn" @click="closePopup">Cancel</button>
     </template>
-  </the-dialog-box>
+  </the-popup>
 </template>
 
 <script>
 export default {
-  inject: ["createNewBoard", "toggleNewBoard"],
-  props: ["newBoardTitle"],
+  inject: ["createNewBoard", "closePopup"],
+  props: ["open"],
   data() {
     return {
       newBoardName: "",
@@ -48,6 +48,7 @@ input {
   font-family: "Circular Std Book";
   font-size: 16px;
 }
+
 button {
   margin-top: 25px;
   margin-right: 15px;
@@ -59,11 +60,10 @@ button {
   border-radius: 5px;
   outline: none;
   cursor: pointer;
-  box-shadow: 0px 0px 8px #4141415b;
 }
 
 .add-btn {
-  background: black;
+  background: #2674fa;
 }
 
 .close-btn {
@@ -72,4 +72,5 @@ button {
   box-shadow: none;
   padding: 0px;
 }
+
 </style>
