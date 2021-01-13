@@ -1,7 +1,7 @@
 <template>
   <new-board-popup :open="currentPopup === 'new-board-popup'"></new-board-popup>
   <new-card-popup :open="currentPopup === 'new-card-popup'"></new-card-popup>
-  <view-card-popup :open="currentPopup === 'view-card-popup'"></view-card-popup>
+  <view-card-popup :open="currentPopup === 'view-card-popup'" :currentCardId="currentCardId"></view-card-popup>
   <top-bar @add-board="openPopup('new-board-popup')"></top-bar>
   <main-board @new-card="openPopup('new-card-popup',$event)" @view-card="openPopup('view-card-popup',$event)"></main-board>
 </template>
@@ -25,10 +25,9 @@ export default {
   },
   data() {
     return {
-      currentCardId: 1,
+      currentCardId: null,
       addToBoardId: null,
       currentPopup: null,
-      renderKey: 0,
       listArray: [
         {
           id: 1,
@@ -62,18 +61,14 @@ export default {
     };
   },
   methods: {
-    rerender(){
-      this.renderKey +=1
-    },
     openPopup(popup,params){
       if(popup === "new-card-popup"){
         this.addToBoardId = params
       }
       else if(popup === "view-card-popup"){
         this.currentCardId = params
-        this.rerender();
       }
-      this.currentPopup= popup;
+      this.currentPopup = popup;
     },
     closePopup(){
       this.currentPopup= null;

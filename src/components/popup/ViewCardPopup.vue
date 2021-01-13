@@ -8,6 +8,7 @@
     </template>
     <template #default>
       <div>
+        <p>Description</p>
         <textarea
           v-model="newCardDesc"
           placeholder="Description"
@@ -25,8 +26,8 @@
 
 <script>
 export default {
-  inject: ["closePopup", "updateCardDetails", "currentCardId", "listArray"],
-  props: ["open"],
+  inject: ["closePopup", "updateCardDetails", "listArray"],
+  props: ["open", "currentCardId"],
   data() {
     return {
       newCardTitle: "",
@@ -49,7 +50,7 @@ export default {
       }
     }
   },
-  beforeMount(){
+  beforeUpdate(){
      this.listArray.forEach((board) => {
         const index = board.value.findIndex((card) => card.id === this.currentCardId);
         if (index !== -1) {
@@ -57,7 +58,7 @@ export default {
           this.newCardTitle = board.value[index].name;
           this.newCardDesc = board.value[index].description;
         }
-      });
+    });
   }
 };
 </script>
@@ -67,6 +68,11 @@ export default {
   color: red;
   margin: 5px 0px 0px 0px;
 }
+
+.rm-mb{
+  margin-bottom: 5px;
+}
+
 input {
   width: 400px;
   font-family: "Circular Std Bold";
@@ -78,13 +84,15 @@ textarea {
   font-family: "Circular Std Book";
   width: 400px;
   padding: 10px 11px;
-  margin: 20px 0px 0px 0px;
+  margin: 0px;
   font-size: 16px;
   resize: none;
+  background: #f4f7fd;
+  border: none;
+  border-radius: 5px;
+
 }
 button {
-  margin-top: 25px;
-  margin-right: 15px;
   padding: 10px 30px;
   font-size: 16px;
   font-family: "Circular Std Medium";
@@ -95,12 +103,10 @@ button {
   cursor: pointer;
 }
 
-.edit-btn {
-  background: #2674fa;
-}
-
 .update-btn {
   background: #2674fa;
+  margin-top: 25px;
+  margin-right: 15px;
 }
 
 .close-btn {
@@ -111,7 +117,4 @@ button {
   padding: 0px;
 }
 
-dialog {
-  max-width: 600px;
-}
 </style>

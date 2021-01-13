@@ -1,7 +1,8 @@
 <template>
   <div class="topbar">
+    <div class="overlay"></div>
     <h1>Hey, Welcome ...</h1>
-    <div class="btn-holder">
+    <div class="content-holder">
       <button @click="$emit('addBoard')" class="add-btn">+ Add Board</button>
       <!-- <button class="set-btn">
         <img src="../assets/icons/settings.png" alt="icon" />
@@ -39,11 +40,13 @@ h1 {
   line-height: 56px;
   margin-bottom: 30px;
   color: white;
+  z-index: 2;
 }
 
-.btn-holder {
+.content-holder {
   margin: auto 0px;
   display: flex;
+  z-index: 2;
 }
 
 .add-btn {
@@ -73,5 +76,15 @@ h1 {
 img {
   height: 22px;
   width: 22px;
+}
+
+.overlay{
+  height: 100%;
+  width: 100%;
+  background: #00000091;
+  position: absolute;
+  top:0px;
+  left: 0px;
+  z-index: 1;
 }
 </style>
