@@ -1,38 +1,45 @@
 <template>
-  <the-dialog-box :title="'New Card'" @close="toggleNewCard">
+  <the-popup :title="'New Card'" @close="closePopup" :open="open">
     <template #default>
-      <input type="text" v-model="newCardTitle" placeholder="Title"/>
-      <textarea v-model="newCardDesc" placeholder="Description" rows="5"></textarea>
+      <input type="text" v-model="newCardTitle" placeholder="Title" />
+      <textarea
+        v-model="newCardDesc"
+        placeholder="Description"
+        rows="5"
+      ></textarea>
       <p class="error-text" v-show="showError">* All Fields Required 👿</p>
     </template>
     <template #actions>
       <button class="add-btn" @click="ValidateNewCard">Add</button>
-      <button class="close-btn" @click="toggleNewCard">Cancel</button>
+      <button class="close-btn" @click="closePopup">Cancel</button>
     </template>
-  </the-dialog-box>
+  </the-popup>
 </template>
 
 <script>
 export default {
-  inject: ["createNewCard", "toggleNewCard"],
-  props:["boardId"],
-  data(){
-      return {
-          newCardTitle: "",
-          newCardDesc: "",
-          showError: false
-      }
+  inject: ["createNewCard", "closePopup"],
+  props: ["open"],
+  data() {
+    return {
+      newCardTitle: "",
+      newCardDesc: "",
+      showError: false,
+    };
   },
   methods: {
-      ValidateNewCard(){
-          if(this.newCardTitle === "" || this.newCardDesc === ""){
-              this.showError= true;
-          }
-          else{
-              this.createNewCard(this.boardId,this.newCardTitle,this.newCardDesc);
-          }
+    ValidateNewCard() {
+      if (this.newCardTitle === "" || this.newCardDesc === "") {
+        this.showError = true;
+      } else {
+        this.createNewCard(this.newCardTitle, this.newCardDesc);
+        setTimeout(() => {
+          this.newCardTitle = "";
+          this.newCardDesc = "";
+        }, 100);
       }
-  }
+    },
+  },
 };
 </script>
 
@@ -50,7 +57,7 @@ input {
   font-size: 16px;
   display: block;
 }
-textarea{
+textarea {
   font-family: "Circular Std Book";
   width: 400px;
   padding: 10px 11px;
@@ -69,11 +76,10 @@ button {
   border-radius: 5px;
   outline: none;
   cursor: pointer;
-  box-shadow: 0px 0px 8px #4141415b;
 }
 
 .add-btn {
-  background: black;
+  background: #2674fa;
 }
 
 .close-btn {

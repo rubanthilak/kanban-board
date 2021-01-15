@@ -1,17 +1,17 @@
 import { createApp } from 'vue'
 import App from './App.vue'
-import NavigationBar from './components/NavigationBar.vue';
 import MainBoard from './components/MainBoard.vue';
-import TheDialogBox from './components/cards/TheDialogBox.vue';
-import NewBoardPopup from './components/cards/NewBoardPopup.vue';
-import NewCardPopup from './components/cards/NewCardPopup.vue';
-import ViewCardPopup from './components/cards/ViewCardPopup.vue';
+import TopBar from './components/TopBar.vue';
+import ThePopup from './components/popup/ThePopup.vue';
+import NewBoardPopup from './components/popup/NewBoardPopup.vue';
+import NewCardPopup from './components/popup/NewCardPopup.vue';
+import ViewCardPopup from './components/popup/ViewCardPopup.vue';
 
 const app = createApp(App);
 
-app.component("navigation-bar", NavigationBar);
+app.component("top-bar", TopBar);
 app.component("main-board", MainBoard);
-app.component("the-dialog-box", TheDialogBox);
+app.component("the-popup", ThePopup);
 app.component("new-board-popup", NewBoardPopup);
 app.component("new-card-popup", NewCardPopup);
 app.component("view-card-popup", ViewCardPopup);

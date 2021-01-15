@@ -1,116 +1,94 @@
 <template>
-  <new-card-popup
-    :board-id="newCardParentId"
-    v-if="newCardVisible"
-  ></new-card-popup>
+  <new-board-popup :open="currentPopup === 'new-board-popup'"></new-board-popup>
+  <new-card-popup :open="currentPopup === 'new-card-popup'"></new-card-popup>
   <view-card-popup
-    :card="viewCard"
-    v-if="viewCardVisible"
+    :open="currentPopup === 'view-card-popup'"
+    :currentCardId="currentCardId"
   ></view-card-popup>
-  <new-board-popup
-    :newBoardTitle="'New Board'"
-    v-if="newBoardVisible"
-  ></new-board-popup>
-  <navigation-bar @add-board="toggleNewBoard"></navigation-bar>
-  <main-board 
-  @new-card="toggleNewCard($event)"
-  @view-card="toggleViewCard($event)"
+  <top-bar @add-board="openPopup('new-board-popup')"></top-bar>
+  <main-board
+    @new-card="openPopup('new-card-popup', $event)"
+    @view-card="openPopup('view-card-popup', $event)"
+    @sync-data="syncData"
   ></main-board>
 </template>
 
 <script>
+import db from "./helpers/DatabaseHelper";
 export default {
   name: "App",
   provide() {
     return {
       listArray: this.listArray,
-      toggleNewBoard: this.toggleNewBoard,
-      toggleNewCard: this.toggleNewCard,
-      toggleViewCard: this.toggleViewCard,
+      //methods
       createNewBoard: this.createNewBoard,
       createNewCard: this.createNewCard,
-      updateCardDetails: this.updateCardDetails
+      updateCardDetails: this.updateCardDetails,
+      openPopup: this.openPopup,
+      closePopup: this.closePopup,
+      //params for popup
+      currentCardId: this.currentCardId,
+      addToBoardId: this.addToBoardId,
     };
   },
   data() {
     return {
-      newBoardVisible: false,
-      newCardVisible: false,
-      viewCardVisible: false,
-      newCardParentId: null,
-      viewCard: null,
-      listArray: [
-        {
-          id: 1,
-          name: "List 1",
-          value: [
-            { name: "John", id: 1, description: "Hello" },
-            { name: "Joao", id: 2, description: "Hello" },
-            { name: "Jean", id: 3, description: "Hello" },
-            { name: "Gerard", id: 4, description: "Hello"  },
-          ],
-        },
-        {
-          id: 2,
-          name: "List 2",
-          value: [
-            { name: "Juan", id: 5, description: "Hello" },
-            { name: "Edgard", id: 6, description: "Hello" },
-            { name: "Johnson", id: 7, description: "Hello" },
-          ],
-        },
-        {
-          id: 3,
-          name: "List 3",
-          value: [
-            { name: "Juan", id: 8, description: "Hello" },
-            { name: "Edgard", id: 9, description: "Hello" },
-            { name: "Johnson", id: 10, description: "Hello" },
-          ],
-        },
-      ],
+      currentCardId: null,
+      addToBoardId: null,
+      currentPopup: null,
+      listArray: [],
     };
   },
   methods: {
-    toggleNewBoard() {
-      this.newBoardVisible = !this.newBoardVisible;
+    openPopup(popup, params) {
+      if (popup === "new-card-popup") {
+        this.addToBoardId = params;
+      } else if (popup === "view-card-popup") {
+        this.currentCardId = params;
+      }
+      this.currentPopup = popup;
     },
-    toggleNewCard(value) {
-      this.newCardVisible = !this.newCardVisible;
-      this.newCardParentId = value;
+    closePopup() {
+      this.currentPopup = null;
     },
-    toggleViewCard(card) {
-      this.viewCardVisible = !this.viewCardVisible;
-      this.viewCard = card;
+    async createNewBoard(name) {
+      await db.addBoard(name);
+      this.closePopup();
     },
-    createNewBoard(name) {
-      this.listArray.push({
-        name: name,
-        value: [],
-      });
-      this.newBoardVisible = !this.newBoardVisible;
-    },
-    createNewCard(boardId, title, des) {
-      const selectedItem = this.listArray.find((board) => board.id === boardId);
-      selectedItem.value.push({
-        id: Date.now().toString(),
+    async createNewCard(title, des) {
+      var card = {
+        _id: Date.now().toString(),
         name: title,
         description: des,
-      });
-      this.newCardVisible = !this.newCardVisible;
-      this.newCardParentId = null;
+      };
+      await db.addCard(this.addToBoardId,card)
+      this.closePopup();
     },
-    updateCardDetails(params){
+    async updateCardDetails(params) {
       this.listArray.forEach((board) => {
-        const index = board.value.findIndex(card => card.id === params.id);
-        if(index !== -1){
+        const index = board.value.findIndex((card) => card._id === params._id);
+        if (index !== -1) {
           board.value[index] = params;
         }
-      })  
-      this.viewCardVisible= false;
-      this.viewCard = null;
+      });
+      await db.updateBoard(this.listArray);
+      this.closePopup();
+    },
+    async fetchData() {
+      const temp = await db.readBoard();
+      this.listArray.splice(0,this.listArray.length);
+      this.listArray.push(...temp);
+    },
+    async syncData(){
+      await db.updateBoard(this.listArray); 
     }
   },
+  mounted(){
+    this.fetchData();
+  },
+  beforeUpdate(){
+    this.fetchData();
+  }
 };
 </script>
 
@@ -123,7 +101,11 @@ export default {
 body {
   margin: 0px;
   padding: 0px;
-  background: #f8f8f8;
-  overflow-x: hidden;
+  background: #ffffff;
+}
+h1 {
+  font-family: "Circular Std Bold";
+  margin-left: 25px;
+  margin-bottom: 0px;
 }
 </style>
