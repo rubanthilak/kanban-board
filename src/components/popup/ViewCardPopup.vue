@@ -44,7 +44,7 @@ export default {
         const temp = {
           name: this.newCardTitle,
           description: this.newCardDesc,
-          id: this.newCardId,
+          _id: this.newCardId,
         };
         this.updateCardDetails(temp);
       }
@@ -52,9 +52,9 @@ export default {
   },
   beforeUpdate(){
      this.listArray.forEach((board) => {
-        const index = board.value.findIndex((card) => card.id === this.currentCardId);
+        const index = board.value.findIndex((card) => card._id === this.currentCardId);
         if (index !== -1) {
-          this.newCardId = board.value[index].id;
+          this.newCardId = board.value[index]._id;
           this.newCardTitle = board.value[index].name;
           this.newCardDesc = board.value[index].description;
         }

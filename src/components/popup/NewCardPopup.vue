@@ -1,8 +1,12 @@
 <template>
   <the-popup :title="'New Card'" @close="closePopup" :open="open">
     <template #default>
-      <input type="text" v-model="newCardTitle" placeholder="Title"/>
-      <textarea v-model="newCardDesc" placeholder="Description" rows="5"></textarea>
+      <input type="text" v-model="newCardTitle" placeholder="Title" />
+      <textarea
+        v-model="newCardDesc"
+        placeholder="Description"
+        rows="5"
+      ></textarea>
       <p class="error-text" v-show="showError">* All Fields Required 👿</p>
     </template>
     <template #actions>
@@ -14,25 +18,28 @@
 
 <script>
 export default {
-  inject: ["createNewCard", "closePopup",],
-  props:["open"],
-  data(){
-      return {
-          newCardTitle: "",
-          newCardDesc: "",
-          showError: false
-      }
+  inject: ["createNewCard", "closePopup"],
+  props: ["open"],
+  data() {
+    return {
+      newCardTitle: "",
+      newCardDesc: "",
+      showError: false,
+    };
   },
   methods: {
-      ValidateNewCard(){
-          if(this.newCardTitle === "" || this.newCardDesc === ""){
-              this.showError= true;
-          }
-          else{
-              this.createNewCard(this.newCardTitle, this.newCardDesc);
-          }
+    ValidateNewCard() {
+      if (this.newCardTitle === "" || this.newCardDesc === "") {
+        this.showError = true;
+      } else {
+        this.createNewCard(this.newCardTitle, this.newCardDesc);
+        setTimeout(() => {
+          this.newCardTitle = "";
+          this.newCardDesc = "";
+        }, 100);
       }
-  }
+    },
+  },
 };
 </script>
 
@@ -50,7 +57,7 @@ input {
   font-size: 16px;
   display: block;
 }
-textarea{
+textarea {
   font-family: "Circular Std Book";
   width: 400px;
   padding: 10px 11px;

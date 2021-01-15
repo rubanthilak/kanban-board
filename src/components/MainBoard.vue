@@ -1,16 +1,17 @@
 <template>
   <draggable
     :list="listArray"
-    item-key="id"
+    item-key="_id"
     handle=".handle"
     class="row"
     ghost-class="ghost"
     drag-class="drag"
     :force-fallback="true"
+    @end="$emit('syncData')"
   >
     <template #item="{ element }">
       <div class="board">
-        <h4 class="handle">{{ element.name }}</h4>
+        <h4 class="handle">{{ element.title }}</h4>
         <div class="card">
           <draggable
             v-model="element.value"
@@ -18,14 +19,15 @@
             group= "board"
             ghost-class="ghost"
             drag-class="drag"
+            @end="$emit('syncData')"
           >
             <template #item="{ element }">
-              <div class="list-item" @click="viewCard(element.id)">
+              <div class="list-item" @click="viewCard(element._id)">
                 <p>{{ resizeNameLength(element.name) }}</p>
               </div>
             </template>
           </draggable>
-          <div @click="newCard(element.id)" class="add-card-button">
+          <div @click="newCard(element._id)" class="add-card-button">
             <p><span>+</span> Add Task</p>
           </div>
         </div>
@@ -37,13 +39,13 @@
 <script>
 import draggable from "vuedraggable";
 export default {
-  inject: ["listArray"],
+  inject: ['listArray'],
   components: {
     draggable,
   },
   data(){
     return {
-      drag: false
+      drag: false,
     }
   },
   methods: {
@@ -59,7 +61,7 @@ export default {
       }
       return name;
     },
-  },
+  }
 };
 </script>
 

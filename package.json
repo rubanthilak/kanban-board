@@ -15,6 +15,10 @@
   "main": "background.js",
   "dependencies": {
     "core-js": "^3.6.5",
+    "pouch-vue": "^0.3.5",
+    "pouchdb": "^7.2.2",
+    "pouchdb-find": "^7.2.2",
+    "pouchdb-live-find": "^0.4.0",
     "vue": "^3.0.0",
     "vuedraggable": "^4.0.1"
   },

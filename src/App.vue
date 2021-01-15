@@ -1,12 +1,20 @@
 <template>
   <new-board-popup :open="currentPopup === 'new-board-popup'"></new-board-popup>
   <new-card-popup :open="currentPopup === 'new-card-popup'"></new-card-popup>
-  <view-card-popup :open="currentPopup === 'view-card-popup'" :currentCardId="currentCardId"></view-card-popup>
+  <view-card-popup
+    :open="currentPopup === 'view-card-popup'"
+    :currentCardId="currentCardId"
+  ></view-card-popup>
   <top-bar @add-board="openPopup('new-board-popup')"></top-bar>
-  <main-board @new-card="openPopup('new-card-popup',$event)" @view-card="openPopup('view-card-popup',$event)"></main-board>
+  <main-board
+    @new-card="openPopup('new-card-popup', $event)"
+    @view-card="openPopup('view-card-popup', $event)"
+    @sync-data="syncData"
+  ></main-board>
 </template>
 
 <script>
+import db from "./helpers/DatabaseHelper";
 export default {
   name: "App",
   provide() {
@@ -20,7 +28,7 @@ export default {
       closePopup: this.closePopup,
       //params for popup
       currentCardId: this.currentCardId,
-      addToBoardId: this.addToBoardId
+      addToBoardId: this.addToBoardId,
     };
   },
   data() {
@@ -28,77 +36,59 @@ export default {
       currentCardId: null,
       addToBoardId: null,
       currentPopup: null,
-      listArray: [
-        {
-          id: 1,
-          name: "Things to do  🚀",
-          value: [
-            { name: "John", id: 1, description: "Hello" },
-            { name: "Joao", id: 2, description: "Hello" },
-            { name: "Jean", id: 3, description: "Hello" },
-            { name: "Gerard", id: 4, description: "Hello" },
-          ],
-        },
-        {
-          id: 2,
-          name: "On Progress ...",
-          value: [
-            { name: "Juan", id: 5, description: "Hello" },
-            { name: "Edgard", id: 6, description: "Hello" },
-            { name: "Johnson", id: 7, description: "Hello" },
-          ],
-        },
-        {
-          id: 3,
-          name: "Completed 🎈",
-          value: [
-            { name: "Juan", id: 8, description: "Hello" },
-            { name: "Edgard", id: 9, description: "Hello" },
-            { name: "Johnson", id: 10, description: "Hello" },
-          ],
-        },
-      ],
+      listArray: [],
     };
   },
   methods: {
-    openPopup(popup,params){
-      if(popup === "new-card-popup"){
-        this.addToBoardId = params
-      }
-      else if(popup === "view-card-popup"){
-        this.currentCardId = params
+    openPopup(popup, params) {
+      if (popup === "new-card-popup") {
+        this.addToBoardId = params;
+      } else if (popup === "view-card-popup") {
+        this.currentCardId = params;
       }
       this.currentPopup = popup;
     },
-    closePopup(){
-      this.currentPopup= null;
+    closePopup() {
+      this.currentPopup = null;
     },
-    createNewBoard(name) {
-      this.listArray.push({
-        name: name,
-        value: [],
-      });
+    async createNewBoard(name) {
+      await db.addBoard(name);
       this.closePopup();
     },
-    createNewCard(title, des) {
-      const selectedItem = this.listArray.find((board) => board.id === this.addToBoardId);
-      selectedItem.value.push({
-        id: Date.now().toString(),
+    async createNewCard(title, des) {
+      var card = {
+        _id: Date.now().toString(),
         name: title,
         description: des,
-      });
+      };
+      await db.addCard(this.addToBoardId,card)
       this.closePopup();
     },
-    updateCardDetails(params) {
+    async updateCardDetails(params) {
       this.listArray.forEach((board) => {
-        const index = board.value.findIndex((card) => card.id === params.id);
+        const index = board.value.findIndex((card) => card._id === params._id);
         if (index !== -1) {
           board.value[index] = params;
         }
       });
+      await db.updateBoard(this.listArray);
       this.closePopup();
     },
+    async fetchData() {
+      const temp = await db.readBoard();
+      this.listArray.splice(0,this.listArray.length);
+      this.listArray.push(...temp);
+    },
+    async syncData(){
+      await db.updateBoard(this.listArray); 
+    }
   },
+  mounted(){
+    this.fetchData();
+  },
+  beforeUpdate(){
+    this.fetchData();
+  }
 };
 </script>
 
@@ -118,5 +108,4 @@ h1 {
   margin-left: 25px;
   margin-bottom: 0px;
 }
-
 </style>

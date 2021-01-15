@@ -4,9 +4,6 @@
     <h1>Hey, Welcome ...</h1>
     <div class="content-holder">
       <button @click="$emit('addBoard')" class="add-btn">+ Add Board</button>
-      <!-- <button class="set-btn">
-        <img src="../assets/icons/settings.png" alt="icon" />
-      </button> -->
     </div>
   </div>
 </template>
@@ -23,11 +20,7 @@ export default {
   flex-direction: column;
   padding: 70px 25px;
   justify-content: space-between;
-  background-image: url("../assets/cover/cover1.jpg");
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
+  background: #2674fa;
   position: fixed;
   width: calc(100vw - 50px);
   top: 0px;

@@ -27,6 +27,9 @@ export default {
         this.showError = true;
       } else {
         this.createNewBoard(this.newBoardName.charAt(0).toUpperCase() + this.newBoardName.substring(1));
+        setTimeout(() => {
+          this.newBoardName = "";
+        },100)
       }
     },
   },
