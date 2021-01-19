@@ -11,7 +11,10 @@
   >
     <template #item="{ element }">
       <div class="board">
-        <h4 class="handle">{{ element.title }}</h4>
+        <div class="handle title-holder" @click="toggleEditMode(element._id)">
+          <h4  v-show="!(editMode === element._id)">{{ element.title }}</h4>
+          <textarea ref='{{ element._id }}' v-show="editMode === element._id" v-model="element.title"  @blur="validateCardDetails(element._id,element.title)"></textarea>
+        </div>
         <div class="card">
           <draggable
             v-model="element.value"
@@ -39,16 +42,21 @@
 <script>
 import draggable from "vuedraggable";
 export default {
-  inject: ['listArray'],
+  inject: ['listArray','fetchData','syncData'],
   components: {
     draggable,
   },
   data(){
     return {
       drag: false,
+      editMode: "",
     }
   },
   methods: {
+    toggleEditMode(id){
+      this.editMode = id;
+      console.log(this.$refs)
+    },
     newTask(id) {
       this.$emit("newTask",id);
     },
@@ -61,7 +69,15 @@ export default {
       }
       return name;
     },
-  }
+    async validateCardDetails(id,title){
+      if(title === ""){
+        this.fetchData();
+      }else{
+        this.syncData()
+      }
+      this.toggleEditMode("");
+    }
+  },
 };
 </script>
 
@@ -75,17 +91,38 @@ export default {
   margin-top: 270px;
 }
 
+.handle{
+  cursor: pointer;
+}
+
+.title-holder{
+  width: 255px;
+  padding-bottom: 15px;
+  max-height: 24px;
+}
+
 p {
   margin: 0px;
 }
 
-h4 {
+h4{
   cursor: pointer;
   margin: 0px;
+  line-height: 28px;
   font-size: 20px;
   font-family: "Circular Std Bold";
-  margin-bottom: 15px;
+}
+
+textarea {
   line-height: 24px;
+  font-size: 20px;
+  font-family: "Circular Std Bold";
+  padding: 2px 0px;
+  margin: 0px;
+  width: 100%;
+  height: 24px;
+  resize: none;
+  /* border: none; */
 }
 
 .card {

@@ -26,6 +26,8 @@ export default {
       updateTaskDetails: this.updateTaskDetails,
       openPopup: this.openPopup,
       closePopup: this.closePopup,
+      fetchData: this.fetchData,
+      syncData: this.syncData,
       //params for popup
       currentTaskId: this.currentTaskId,
       addToCardId: this.addToCardId,
@@ -112,5 +114,8 @@ h1 {
   font-family: "Circular Std Bold";
   margin-left: 25px;
   margin-bottom: 0px;
+}
+.flex{
+  display: flex;
 }
 </style>

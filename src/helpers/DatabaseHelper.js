@@ -32,6 +32,12 @@ export default {
         list: board.list
     });
   },
+  removeCard: async function(){
+
+  },
+  updateCard: async function(){
+
+  },
   addTask: async function(id,task){
     var board  = await db.get("boardlist")
     board.list.forEach(board => {
@@ -44,5 +50,11 @@ export default {
         _rev:board._rev,
         list: board.list
     });
+  },
+  removeTask: async function(){
+
+  },
+  updateTask: async function(){
+
   },
 };

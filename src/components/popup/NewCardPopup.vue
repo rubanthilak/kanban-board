@@ -1,12 +1,12 @@
 <template>
- <the-popup :title="'New Card'" @close="closePopup" :open="open">
+  <the-popup :title="'New Card'" @close="close" :open="open">
     <template #default>
       <input v-model="newCardName" type="text" placeholder="Title" />
       <p class="error-text" v-show="showError">* Title require 👿</p>
     </template>
     <template #actions>
       <button class="add-btn" @click="validateCardName">Create</button>
-      <button class="close-btn" @click="closePopup">Cancel</button>
+      <button class="close-btn" @click="close">Cancel</button>
     </template>
   </the-popup>
 </template>
@@ -26,11 +26,18 @@ export default {
       if (this.newCardName === "") {
         this.showError = true;
       } else {
-        this.createNewCard(this.newCardName.charAt(0).toUpperCase() + this.newCardName.substring(1));
+        this.createNewCard(
+          this.newCardName.charAt(0).toUpperCase() +
+            this.newCardName.substring(1)
+        );
         setTimeout(() => {
           this.newCardName = "";
-        },100)
+        }, 100);
       }
+    },
+    close() {
+      this.closePopup();
+      this.newCardName = "";
     },
   },
 };
@@ -75,5 +82,4 @@ button {
   box-shadow: none;
   padding: 0px;
 }
-
 </style>
