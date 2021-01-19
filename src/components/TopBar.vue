@@ -3,14 +3,14 @@
     <div class="overlay"></div>
     <h1>Hey, Welcome ...</h1>
     <div class="content-holder">
-      <button @click="$emit('addBoard')" class="add-btn">+ Add Board</button>
+      <button @click="$emit('addCard')" class="add-btn">+ Add Card</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  emits: ["addBoard"],
+  emits: ["addCard"],
 };
 </script>
 

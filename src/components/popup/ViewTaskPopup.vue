@@ -4,13 +4,13 @@
     :open="open"
   >
     <template #header>
-        <input type="text" v-model="newCardTitle" placeholder="Title" />
+        <input type="text" v-model="newTaskTitle" placeholder="Title" />
     </template>
     <template #default>
       <div>
         <p>Description</p>
         <textarea
-          v-model="newCardDesc"
+          v-model="newTaskDesc"
           placeholder="Description"
           rows="5"
         ></textarea>
@@ -18,7 +18,7 @@
       </div>
     </template>
     <template #actions>
-      <button class="update-btn" @click="ValidateNewCard">Update</button>
+      <button class="update-btn" @click="ValidateNewTask">Update</button>
       <button class="close-btn" @click="closePopup">Close</button>
     </template>
   </the-popup>
@@ -26,37 +26,37 @@
 
 <script>
 export default {
-  inject: ["closePopup", "updateCardDetails", "listArray"],
-  props: ["open", "currentCardId"],
+  inject: ["closePopup", "updateTaskDetails", "listArray"],
+  props: ["open", "currentTaskId"],
   data() {
     return {
-      newCardTitle: "",
-      newCardDesc: "",
-      newCardId: null,
+      newTaskTitle: "",
+      newTaskDesc: "",
+      newTaskId: null,
       showError: false,
     };
   },
   methods: {
-    ValidateNewCard() {
-      if (this.newCardTitle === "" || this.newCardDesc === "") {
+    ValidateNewTask() {
+      if (this.newTaskTitle === "" || this.newTaskDesc === "") {
         this.showError = true;
       } else {
         const temp = {
-          name: this.newCardTitle,
-          description: this.newCardDesc,
-          _id: this.newCardId,
+          name: this.newTaskTitle,
+          description: this.newTaskDesc,
+          _id: this.newTaskId,
         };
-        this.updateCardDetails(temp);
+        this.updateTaskDetails(temp);
       }
     }
   },
   beforeUpdate(){
      this.listArray.forEach((board) => {
-        const index = board.value.findIndex((card) => card._id === this.currentCardId);
+        const index = board.value.findIndex((card) => card._id === this.currentTaskId);
         if (index !== -1) {
-          this.newCardId = board.value[index]._id;
-          this.newCardTitle = board.value[index].name;
-          this.newCardDesc = board.value[index].description;
+          this.newTaskId = board.value[index]._id;
+          this.newTaskTitle = board.value[index].name;
+          this.newTaskDesc = board.value[index].description;
         }
     });
   }

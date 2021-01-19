@@ -1,11 +1,16 @@
 <template>
- <the-popup :title="'New Board'" @close="closePopup" :open="open">
+  <the-popup :title="'New Task'" @close="closePopup" :open="open">
     <template #default>
-      <input v-model="newBoardName" type="text" placeholder="Title" />
-      <p class="error-text" v-show="showError">* Title require 👿</p>
+      <input type="text" v-model="newTaskTitle" placeholder="Title" />
+      <textarea
+        v-model="newTaskDesc"
+        placeholder="Description"
+        rows="5"
+      ></textarea>
+      <p class="error-text" v-show="showError">* All Fields Required 👿</p>
     </template>
     <template #actions>
-      <button class="add-btn" @click="validateBoardName">Create</button>
+      <button class="add-btn" @click="ValidateNewTask">Add</button>
       <button class="close-btn" @click="closePopup">Cancel</button>
     </template>
   </the-popup>
@@ -13,36 +18,36 @@
 
 <script>
 export default {
-  inject: ["createNewBoard", "closePopup"],
+  inject: ["createNewTask", "closePopup"],
   props: ["open"],
   data() {
     return {
-      newBoardName: "",
+      newTaskTitle: "",
+      newTaskDesc: "",
       showError: false,
     };
   },
   methods: {
-    validateBoardName() {
-      if (this.newBoardName === "") {
+    ValidateNewTask() {
+      if (this.newTaskTitle === "" || this.newTaskDesc === "") {
         this.showError = true;
       } else {
-        this.createNewBoard(this.newBoardName.charAt(0).toUpperCase() + this.newBoardName.substring(1));
+        this.createNewTask(this.newTaskTitle, this.newTaskDesc);
         setTimeout(() => {
-          this.newBoardName = "";
-        },100)
+          this.newTaskTitle = "";
+          this.newTaskDesc = "";
+        }, 100);
       }
     },
   },
 };
 </script>
 
+
 <style scoped>
 .error-text {
   color: red;
   margin: 5px 0px 0px 0px;
-}
-p {
-  margin: 25px 0px 0px 0px;
 }
 input {
   width: 400px;
@@ -50,8 +55,16 @@ input {
   margin: 20px 0px 0px 0px;
   font-family: "Circular Std Book";
   font-size: 16px;
+  display: block;
 }
-
+textarea {
+  font-family: "Circular Std Book";
+  width: 400px;
+  padding: 10px 11px;
+  margin: 20px 0px 0px 0px;
+  font-size: 16px;
+  resize: none;
+}
 button {
   margin-top: 25px;
   margin-right: 15px;
@@ -73,7 +86,7 @@ button {
   color: #f53a53;
   background: white;
   box-shadow: none;
+  transition: 0.3s;
   padding: 0px;
 }
-
 </style>

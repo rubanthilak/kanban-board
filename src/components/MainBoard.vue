@@ -16,18 +16,18 @@
           <draggable
             v-model="element.value"
             item-key="id"
-            group= "board"
+            group= "card"
             ghost-class="ghost"
             drag-class="drag"
             @end="$emit('syncData')"
           >
             <template #item="{ element }">
-              <div class="list-item" @click="viewCard(element._id)">
+              <div class="list-item" @click="viewTask(element._id)">
                 <p>{{ resizeNameLength(element.name) }}</p>
               </div>
             </template>
           </draggable>
-          <div @click="newCard(element._id)" class="add-card-button">
+          <div @click="newTask(element._id)" class="add-card-button">
             <p><span>+</span> Add Task</p>
           </div>
         </div>
@@ -49,11 +49,11 @@ export default {
     }
   },
   methods: {
-    newCard(id) {
-      this.$emit("newCard",id);
+    newTask(id) {
+      this.$emit("newTask",id);
     },
-    viewCard(id) {
-      this.$emit("viewCard",id);
+    viewTask(id) {
+      this.$emit("viewTask",id);
     },
     resizeNameLength(name) {
       if (name.length > 70) {
