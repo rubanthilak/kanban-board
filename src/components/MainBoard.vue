@@ -11,15 +11,24 @@
   >
     <template #item="{ element }">
       <div class="board">
-        <div class="handle title-holder" @click="toggleEditMode(element._id)">
-          <h4  v-show="!(editMode === element._id)">{{ element.title }}</h4>
-          <textarea ref='{{ element._id }}' v-show="editMode === element._id" v-model="element.title"  @blur="validateCardDetails(element._id,element.title)"></textarea>
+        <div class="flex">
+          <div class="handle title-holder">
+            <h4 v-show="!(editMode === element._id)">{{ element.title }}</h4>
+            <textarea
+              :ref="setItemRef"
+              v-show="editMode === element._id"
+              v-model="element.title"
+              @blur="validateCardDetails(element._id, element.title)"
+            ></textarea>
+          </div>
+          <button v-show="!(editMode === element._id)" @click="toggleEditMode(element._id)">Edit</button>
+          <button v-show="editMode === element._id" @click="toggleEditMode(element._id)">Del</button>
         </div>
         <div class="card">
           <draggable
             v-model="element.value"
             item-key="id"
-            group= "card"
+            group="card"
             ghost-class="ghost"
             drag-class="drag"
             @end="$emit('syncData')"
@@ -42,26 +51,34 @@
 <script>
 import draggable from "vuedraggable";
 export default {
-  inject: ['listArray','fetchData','syncData'],
+  inject: ["listArray", "fetchData", "syncData"],
   components: {
     draggable,
   },
-  data(){
+  data() {
     return {
       drag: false,
       editMode: "",
-    }
+      itemRefs: [],
+    };
   },
   methods: {
-    toggleEditMode(id){
+    setItemRef(el) {
+      if (el) {
+        this.itemRefs.push(el);
+      }
+    },
+    toggleEditMode(id) {
       this.editMode = id;
-      console.log(this.$refs)
+      setInterval(() => {
+        this.itemRefs[0].focus();
+      },5);
     },
     newTask(id) {
-      this.$emit("newTask",id);
+      this.$emit("newTask", id);
     },
     viewTask(id) {
-      this.$emit("viewTask",id);
+      this.$emit("viewTask", id);
     },
     resizeNameLength(name) {
       if (name.length > 70) {
@@ -69,14 +86,20 @@ export default {
       }
       return name;
     },
-    async validateCardDetails(id,title){
-      if(title === ""){
+    async validateCardDetails(id, title) {
+      if (title === "") {
         this.fetchData();
-      }else{
-        this.syncData()
+      } else {
+        this.syncData();
       }
       this.toggleEditMode("");
-    }
+    },
+  },
+  beforeUpdate() {
+    this.itemRefs = [];
+  },
+  updated() {
+    console.log(this.itemRefs);
   },
 };
 </script>
@@ -91,21 +114,26 @@ export default {
   margin-top: 270px;
 }
 
-.handle{
+.handle {
   cursor: pointer;
 }
 
-.title-holder{
-  width: 255px;
-  padding-bottom: 15px;
+.title-holder {
+  width: 210px;
+  margin-right: 5px;
+  margin-bottom: 15px;
   max-height: 24px;
+}
+
+button{
+  margin-bottom: 15px;
 }
 
 p {
   margin: 0px;
 }
 
-h4{
+h4 {
   cursor: pointer;
   margin: 0px;
   line-height: 28px;
@@ -150,8 +178,8 @@ textarea {
 
 .add-card-button {
   padding: 8px;
-  background: #E5EBF7;
-  color: #E5EBF7;
+  background: #e5ebf7;
+  color: #e5ebf7;
   border-radius: 5px;
   font-family: "Circular Std Bold";
   cursor: pointer;
@@ -170,8 +198,8 @@ textarea {
   opacity: 1;
 }
 
-.ghost, .sortable-ghost {
+.ghost,
+.sortable-ghost {
   opacity: 0;
 }
-
 </style>
