@@ -21,8 +21,8 @@
               @blur="validateCardDetails(element._id, element.title)"
             ></textarea>
           </div>
-          <button v-show="!(editMode === element._id)" @click="toggleEditMode(element._id)">Edit</button>
-          <button v-show="editMode === element._id" @click="toggleEditMode(element._id)">Del</button>
+          <div class="icon write-icon" v-show="!(editMode === element._id)" @click="toggleEditMode(element._id)"></div>
+          <div class="icon close-icon" v-show="editMode === element._id" @click="toggleEditMode()"></div>
         </div>
         <div class="card">
           <draggable
@@ -119,10 +119,41 @@ export default {
 }
 
 .title-holder {
-  width: 210px;
+  width: 275px;
   margin-right: 5px;
   margin-bottom: 15px;
   max-height: 24px;
+}
+
+.icon {
+  height: 20px;
+  width: 20px;
+  background: black;
+  margin-top: 4px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.write-icon{
+  background: url("../assets/icons/write.png") no-repeat;
+  background-size: cover;
+  opacity: 0.35;
+}
+
+.write-icon:hover{
+  background: url("../assets/icons/write_hover.png") no-repeat;
+  background-size: cover;
+  opacity: 1;
+}
+
+.close-icon{
+  background: url("../assets/icons/close.png") no-repeat;
+  background-size: cover;
+}
+
+.close-icon:hover{
+  background: url("../assets/icons/close_hover.png") no-repeat;
+  background-size: cover;
 }
 
 button{
@@ -137,7 +168,7 @@ h4 {
   cursor: pointer;
   margin: 0px;
   line-height: 28px;
-  font-size: 20px;
+  font-size: 18px;
   font-family: "Circular Std Bold";
 }
 
@@ -158,8 +189,8 @@ textarea {
   background: #f4f7fd;
   margin-right: 25px;
   margin-bottom: 25px;
-  min-width: 220px;
-  max-width: 220px;
+  min-width: 270px;
+  max-width: 270px;
   float: left;
   transition: 0.5s;
   border-radius: 10px;
