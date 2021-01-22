@@ -109,6 +109,7 @@ body {
   margin: 0px;
   padding: 0px;
   background: #ffffff;
+  overflow-x: hidden;
 }
 h1 {
   font-family: "Circular Std Bold";

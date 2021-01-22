@@ -16,13 +16,22 @@
             <h4 v-show="!(editMode === element._id)">{{ element.title }}</h4>
             <textarea
               :ref="setItemRef"
+              :id="element._id"
               v-show="editMode === element._id"
               v-model="element.title"
               @blur="validateCardDetails(element._id, element.title)"
             ></textarea>
           </div>
-          <div class="icon write-icon" v-show="!(editMode === element._id)" @click="toggleEditMode(element._id)"></div>
-          <div class="icon close-icon" v-show="editMode === element._id" @click="toggleEditMode()"></div>
+          <div
+            class="icon write-icon"
+            v-show="!(editMode === element._id)"
+            @click="toggleEditMode(element._id)"
+          ></div>
+          <div
+            class="icon close-icon"
+            v-show="editMode === element._id"
+            @click="toggleEditMode()"
+          ></div>
         </div>
         <div class="card">
           <draggable
@@ -59,20 +68,22 @@ export default {
     return {
       drag: false,
       editMode: "",
-      itemRefs: [],
+      itemRefs: {},
     };
   },
   methods: {
     setItemRef(el) {
       if (el) {
-        this.itemRefs.push(el);
+        this.itemRefs[el.id] = el;
       }
     },
-    toggleEditMode(id) {
+    toggleEditMode(id="") {
       this.editMode = id;
-      setInterval(() => {
-        this.itemRefs[0].focus();
-      },5);
+      if (id !== "") {
+        setInterval(() => {
+          this.itemRefs[id].focus();
+        }, 5);
+      }
     },
     newTask(id) {
       this.$emit("newTask", id);
@@ -92,11 +103,11 @@ export default {
       } else {
         this.syncData();
       }
-      this.toggleEditMode("");
+      this.toggleEditMode();
     },
   },
   beforeUpdate() {
-    this.itemRefs = [];
+    this.itemRefs = {};
   },
   updated() {
     console.log(this.itemRefs);
@@ -107,11 +118,11 @@ export default {
 <style scoped>
 .row {
   width: auto;
-  min-height: calc(100vh - 335px);
-  padding: 25px;
+  min-height: calc(100vh - 230px);
+  padding: 25px 35px;
   display: flex;
   flex-direction: row;
-  margin-top: 270px;
+  overflow-x:scroll ;
 }
 
 .handle {
@@ -134,29 +145,29 @@ export default {
   cursor: pointer;
 }
 
-.write-icon{
+.write-icon {
   background: url("../assets/icons/write.png") no-repeat;
   background-size: cover;
   opacity: 0.35;
 }
 
-.write-icon:hover{
+.write-icon:hover {
   background: url("../assets/icons/write_hover.png") no-repeat;
   background-size: cover;
   opacity: 1;
 }
 
-.close-icon{
+.close-icon {
   background: url("../assets/icons/close.png") no-repeat;
   background-size: cover;
 }
 
-.close-icon:hover{
+.close-icon:hover {
   background: url("../assets/icons/close_hover.png") no-repeat;
   background-size: cover;
 }
 
-button{
+button {
   margin-bottom: 15px;
 }
 
@@ -232,5 +243,10 @@ textarea {
 .ghost,
 .sortable-ghost {
   opacity: 0;
+}
+@media screen and (max-width:500px){
+  .row{
+    min-height: calc(100vh - 285px);
+  }
 }
 </style>
