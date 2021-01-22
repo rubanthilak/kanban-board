@@ -1,83 +1,106 @@
 <template>
-  <div class="topbar">
-    <div class="overlay"></div>
-    <h1>Hey, Welcome ...</h1>
-    <div class="content-holder">
-      <button @click="$emit('addBoard')" class="add-btn">+ Add Board</button>
-    </div>
+  <div class="topbar-holder">
+      <div class="topbar">
+        <div class="sub-holder flex">
+          <h1 class="date-text">{{ date }}</h1>
+          <div class="sub-holder">
+            <p class="month-text">{{ month }}</p>
+            <p class="year-text">{{ year }}</p>
+          </div>
+        </div>
+        <div class="sub-holder btn-holder">
+          <button @click="$emit('addCard')" class="add-btn"><span>+</span> Add Card</button>
+        </div>
+      </div>
   </div>
 </template>
-
 <script>
 export default {
-  emits: ["addBoard"],
+  emits: ["addCard"],
+  data() {
+    return {
+      today : new Date(),
+      monthNames : ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+      ],
+    }
+  },
+  computed : {
+    date(){
+      return this.today.getDate();
+    },
+    month(){
+      return this.monthNames[this.today.getMonth()];
+    },
+    year(){
+      return this.today.getFullYear();
+    }
+  }
 };
 </script>
 
 <style scoped>
+.topbar-holder{
+  /* position: fixed; */
+  top: 0px;
+  margin: 35px;
+  width: calc(100vw - 70px);
+  background: white;
+  z-index: 1;
+}
 .topbar {
   display: flex;
-  flex-direction: column;
-  padding: 70px 25px;
   justify-content: space-between;
-  background: #2674fa;
-  position: fixed;
-  width: calc(100vw - 50px);
-  top: 0px;
-  left: 0px;
+  border-radius:10px;
+  width: calc(100% - 50px);
+  box-shadow: 0px 3px 15px #00000013;
+  padding: 25px 25px;
+  background: white;
 }
-
-h1 {
+.sub-holder{
+  margin: auto 0px;
+}
+.month-text{
+  font-family: "Proxima Nova Alt";
+  font-weight: bold;
+  font-size: 26px;
+}
+ .year-text{
+   font-family: "Circular Std Bold";
+  font-size: 22px;
+  color: gray;
+ }
+p{
+  margin: 0px 15px;
+}
+h1{
   margin: 0px;
-  font-size: 56px;
-  line-height: 56px;
-  margin-bottom: 30px;
+  font-size: 28px;
+  font-family: "Proxima Nova";
+  border: solid 3px black;
+  border-radius: 10px;
+  padding: 10px 14px;
+}
+button{
+  padding: 10px 20px;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  background: #2674fa;
   color: white;
-  z-index: 2;
-}
-
-.content-holder {
-  margin: auto 0px;
-  display: flex;
-  z-index: 2;
-}
-
-.add-btn {
-  padding: 10px 15px;
-  background: white;
-  color: black;
-  border: none;
-  border-radius: 5px;
-  font-family: "Circular Std Medium";
+  font-family: "Circular Std Bold";
   font-size: 18px;
-  margin-right: 10px;
-  outline: none;
+  vertical-align: text-top;
   cursor: pointer;
 }
 
-.set-btn {
-  background: transparent;
-  padding: 10px 12px;
-  background: white;
-  border: none;
-  border-radius: 5px;
-  margin: auto 0px;
-  outline: none;
-  cursor: pointer;
-}
+@media screen and (max-width:500px){
+  .topbar{
+    flex-direction: column;
+  }
 
-img {
-  height: 22px;
-  width: 22px;
-}
-
-.overlay{
-  height: 100%;
-  width: 100%;
-  background: #00000091;
-  position: absolute;
-  top:0px;
-  left: 0px;
-  z-index: 1;
+  .btn-holder{
+    margin-top: 10px;
+  }
 }
 </style>

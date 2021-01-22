@@ -1,14 +1,14 @@
 <template>
-  <new-board-popup :open="currentPopup === 'new-board-popup'"></new-board-popup>
   <new-card-popup :open="currentPopup === 'new-card-popup'"></new-card-popup>
-  <view-card-popup
-    :open="currentPopup === 'view-card-popup'"
-    :currentCardId="currentCardId"
-  ></view-card-popup>
-  <top-bar @add-board="openPopup('new-board-popup')"></top-bar>
+  <new-task-popup :open="currentPopup === 'new-task-popup'"></new-task-popup>
+  <view-task-popup
+    :open="currentPopup === 'view-task-popup'"
+    :currentTaskId="currentTaskId"
+  ></view-task-popup>
+  <top-bar @add-card="openPopup('new-card-popup')"></top-bar>
   <main-board
-    @new-card="openPopup('new-card-popup', $event)"
-    @view-card="openPopup('view-card-popup', $event)"
+    @new-task="openPopup('new-task-popup', $event)"
+    @view-task="openPopup('view-task-popup', $event)"
     @sync-data="syncData"
   ></main-board>
 </template>
@@ -21,54 +21,61 @@ export default {
     return {
       listArray: this.listArray,
       //methods
-      createNewBoard: this.createNewBoard,
       createNewCard: this.createNewCard,
-      updateCardDetails: this.updateCardDetails,
+      createNewTask: this.createNewTask,
+      updateTaskDetails: this.updateTaskDetails,
       openPopup: this.openPopup,
       closePopup: this.closePopup,
+      fetchData: this.fetchData,
+      syncData: this.syncData,
       //params for popup
-      currentCardId: this.currentCardId,
-      addToBoardId: this.addToBoardId,
+      currentTaskId: this.currentTaskId,
+      addToCardId: this.addToCardId,
     };
   },
   data() {
     return {
-      currentCardId: null,
-      addToBoardId: null,
+      currentTaskId: null,
+      addToCardId: null,
       currentPopup: null,
       listArray: [],
     };
   },
   methods: {
     openPopup(popup, params) {
-      if (popup === "new-card-popup") {
-        this.addToBoardId = params;
-      } else if (popup === "view-card-popup") {
-        this.currentCardId = params;
+      if (popup === "new-task-popup") {
+        this.addToCardId = params;
+      } else if (popup === "view-task-popup") {
+        this.currentTaskId = params;
       }
       this.currentPopup = popup;
     },
     closePopup() {
       this.currentPopup = null;
     },
-    async createNewBoard(name) {
-      await db.addBoard(name);
+    async createNewCard(name) {
+      var temp = {
+        _id: new Date().toISOString(),
+        title: name,
+        value: [],
+      };
+      await db.addCard(temp);
       this.closePopup();
     },
-    async createNewCard(title, des) {
+    async createNewTask(title, des) {
       var card = {
         _id: Date.now().toString(),
         name: title,
         description: des,
       };
-      await db.addCard(this.addToBoardId,card)
+      await db.addTask(this.addToCardId, card);
       this.closePopup();
     },
-    async updateCardDetails(params) {
-      this.listArray.forEach((board) => {
-        const index = board.value.findIndex((card) => card._id === params._id);
+    async updateTaskDetails(params) {
+      this.listArray.forEach((card) => {
+        const index = card.value.findIndex((task) => task._id === params._id);
         if (index !== -1) {
-          board.value[index] = params;
+          card.value[index] = params;
         }
       });
       await db.updateBoard(this.listArray);
@@ -76,19 +83,19 @@ export default {
     },
     async fetchData() {
       const temp = await db.readBoard();
-      this.listArray.splice(0,this.listArray.length);
+      this.listArray.splice(0, this.listArray.length);
       this.listArray.push(...temp);
     },
-    async syncData(){
-      await db.updateBoard(this.listArray); 
-    }
+    async syncData() {
+      await db.updateBoard(this.listArray);
+    },
   },
-  mounted(){
+  mounted() {
     this.fetchData();
   },
-  beforeUpdate(){
+  beforeUpdate() {
     this.fetchData();
-  }
+  },
 };
 </script>
 
@@ -102,10 +109,14 @@ body {
   margin: 0px;
   padding: 0px;
   background: #ffffff;
+  overflow-x: hidden;
 }
 h1 {
   font-family: "Circular Std Bold";
   margin-left: 25px;
   margin-bottom: 0px;
+}
+.flex{
+  display: flex;
 }
 </style>

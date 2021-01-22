@@ -11,23 +11,44 @@
   >
     <template #item="{ element }">
       <div class="board">
-        <h4 class="handle">{{ element.title }}</h4>
+        <div class="flex">
+          <div class="handle title-holder">
+            <h4 v-show="!(editMode === element._id)">{{ element.title }}</h4>
+            <textarea
+              :ref="setItemRef"
+              :id="element._id"
+              v-show="editMode === element._id"
+              v-model="element.title"
+              @blur="validateCardDetails(element._id, element.title)"
+            ></textarea>
+          </div>
+          <div
+            class="icon write-icon"
+            v-show="!(editMode === element._id)"
+            @click="toggleEditMode(element._id)"
+          ></div>
+          <div
+            class="icon close-icon"
+            v-show="editMode === element._id"
+            @click="toggleEditMode()"
+          ></div>
+        </div>
         <div class="card">
           <draggable
             v-model="element.value"
             item-key="id"
-            group= "board"
+            group="card"
             ghost-class="ghost"
             drag-class="drag"
             @end="$emit('syncData')"
           >
             <template #item="{ element }">
-              <div class="list-item" @click="viewCard(element._id)">
+              <div class="list-item" @click="viewTask(element._id)">
                 <p>{{ resizeNameLength(element.name) }}</p>
               </div>
             </template>
           </draggable>
-          <div @click="newCard(element._id)" class="add-card-button">
+          <div @click="newTask(element._id)" class="add-card-button">
             <p><span>+</span> Add Task</p>
           </div>
         </div>
@@ -39,21 +60,36 @@
 <script>
 import draggable from "vuedraggable";
 export default {
-  inject: ['listArray'],
+  inject: ["listArray", "fetchData", "syncData"],
   components: {
     draggable,
   },
-  data(){
+  data() {
     return {
       drag: false,
-    }
+      editMode: "",
+      itemRefs: {},
+    };
   },
   methods: {
-    newCard(id) {
-      this.$emit("newCard",id);
+    setItemRef(el) {
+      if (el) {
+        this.itemRefs[el.id] = el;
+      }
     },
-    viewCard(id) {
-      this.$emit("viewCard",id);
+    toggleEditMode(id="") {
+      this.editMode = id;
+      if (id !== "") {
+        setInterval(() => {
+          this.itemRefs[id].focus();
+        }, 5);
+      }
+    },
+    newTask(id) {
+      this.$emit("newTask", id);
+    },
+    viewTask(id) {
+      this.$emit("viewTask", id);
     },
     resizeNameLength(name) {
       if (name.length > 70) {
@@ -61,18 +97,78 @@ export default {
       }
       return name;
     },
-  }
+    async validateCardDetails(id, title) {
+      if (title === "") {
+        this.fetchData();
+      } else {
+        this.syncData();
+      }
+      this.toggleEditMode();
+    },
+  },
+  beforeUpdate() {
+    this.itemRefs = {};
+  },
+  updated() {
+    console.log(this.itemRefs);
+  },
 };
 </script>
 
 <style scoped>
 .row {
   width: auto;
-  min-height: calc(100vh - 335px);
-  padding: 25px;
+  min-height: calc(100vh - 230px);
+  padding: 25px 35px;
   display: flex;
   flex-direction: row;
-  margin-top: 270px;
+  overflow-x:scroll ;
+}
+
+.handle {
+  cursor: pointer;
+}
+
+.title-holder {
+  width: 275px;
+  margin-right: 5px;
+  margin-bottom: 15px;
+  max-height: 24px;
+}
+
+.icon {
+  height: 20px;
+  width: 20px;
+  background: black;
+  margin-top: 4px;
+  margin-bottom: 15px;
+  cursor: pointer;
+}
+
+.write-icon {
+  background: url("../assets/icons/write.png") no-repeat;
+  background-size: cover;
+  opacity: 0.35;
+}
+
+.write-icon:hover {
+  background: url("../assets/icons/write_hover.png") no-repeat;
+  background-size: cover;
+  opacity: 1;
+}
+
+.close-icon {
+  background: url("../assets/icons/close.png") no-repeat;
+  background-size: cover;
+}
+
+.close-icon:hover {
+  background: url("../assets/icons/close_hover.png") no-repeat;
+  background-size: cover;
+}
+
+button {
+  margin-bottom: 15px;
 }
 
 p {
@@ -82,10 +178,21 @@ p {
 h4 {
   cursor: pointer;
   margin: 0px;
+  line-height: 28px;
+  font-size: 18px;
+  font-family: "Circular Std Bold";
+}
+
+textarea {
+  line-height: 24px;
   font-size: 20px;
   font-family: "Circular Std Bold";
-  margin-bottom: 15px;
-  line-height: 24px;
+  padding: 2px 0px;
+  margin: 0px;
+  width: 100%;
+  height: 24px;
+  resize: none;
+  /* border: none; */
 }
 
 .card {
@@ -93,8 +200,8 @@ h4 {
   background: #f4f7fd;
   margin-right: 25px;
   margin-bottom: 25px;
-  min-width: 220px;
-  max-width: 220px;
+  min-width: 270px;
+  max-width: 270px;
   float: left;
   transition: 0.5s;
   border-radius: 10px;
@@ -113,8 +220,8 @@ h4 {
 
 .add-card-button {
   padding: 8px;
-  background: #E5EBF7;
-  color: #E5EBF7;
+  background: #e5ebf7;
+  color: #e5ebf7;
   border-radius: 5px;
   font-family: "Circular Std Bold";
   cursor: pointer;
@@ -133,8 +240,13 @@ h4 {
   opacity: 1;
 }
 
-.ghost, .sortable-ghost {
+.ghost,
+.sortable-ghost {
   opacity: 0;
 }
-
+@media screen and (max-width:500px){
+  .row{
+    min-height: calc(100vh - 285px);
+  }
+}
 </style>

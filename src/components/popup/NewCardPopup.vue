@@ -1,17 +1,12 @@
 <template>
-  <the-popup :title="'New Card'" @close="closePopup" :open="open">
+  <the-popup :title="'New Card'" @close="close" :open="open">
     <template #default>
-      <input type="text" v-model="newCardTitle" placeholder="Title" />
-      <textarea
-        v-model="newCardDesc"
-        placeholder="Description"
-        rows="5"
-      ></textarea>
-      <p class="error-text" v-show="showError">* All Fields Required 👿</p>
+      <input v-model="newCardName" type="text" placeholder="Title" />
+      <p class="error-text" v-show="showError">* Title require 👿</p>
     </template>
     <template #actions>
-      <button class="add-btn" @click="ValidateNewCard">Add</button>
-      <button class="close-btn" @click="closePopup">Cancel</button>
+      <button class="add-btn" @click="validateCardName">Create</button>
+      <button class="close-btn" @click="close">Cancel</button>
     </template>
   </the-popup>
 </template>
@@ -22,32 +17,39 @@ export default {
   props: ["open"],
   data() {
     return {
-      newCardTitle: "",
-      newCardDesc: "",
+      newCardName: "",
       showError: false,
     };
   },
   methods: {
-    ValidateNewCard() {
-      if (this.newCardTitle === "" || this.newCardDesc === "") {
+    validateCardName() {
+      if (this.newCardName === "") {
         this.showError = true;
       } else {
-        this.createNewCard(this.newCardTitle, this.newCardDesc);
+        this.createNewCard(
+          this.newCardName.charAt(0).toUpperCase() +
+            this.newCardName.substring(1)
+        );
         setTimeout(() => {
-          this.newCardTitle = "";
-          this.newCardDesc = "";
+          this.newCardName = "";
         }, 100);
       }
+    },
+    close() {
+      this.closePopup();
+      this.newCardName = "";
     },
   },
 };
 </script>
 
-
 <style scoped>
 .error-text {
   color: red;
   margin: 5px 0px 0px 0px;
+}
+p {
+  margin: 25px 0px 0px 0px;
 }
 input {
   width: 400px;
@@ -55,16 +57,8 @@ input {
   margin: 20px 0px 0px 0px;
   font-family: "Circular Std Book";
   font-size: 16px;
-  display: block;
 }
-textarea {
-  font-family: "Circular Std Book";
-  width: 400px;
-  padding: 10px 11px;
-  margin: 20px 0px 0px 0px;
-  font-size: 16px;
-  resize: none;
-}
+
 button {
   margin-top: 25px;
   margin-right: 15px;
@@ -86,7 +80,6 @@ button {
   color: #f53a53;
   background: white;
   box-shadow: none;
-  transition: 0.3s;
   padding: 0px;
 }
 </style>
