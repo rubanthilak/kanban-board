@@ -11,8 +11,23 @@
   >
     <template #item="{ element }">
       <div class="board">
-        <div class="flex">
+        <div class="flex title-bar">
           <div class="handle title-holder">
+            <transition name="dropdown">
+              <div class="drop-down" v-if="menuMode === element._id">
+                <div
+                  class="drop-down-menu"
+                  @click="toggleEditMode(element._id)"
+                >
+                  <div class="icon edit-icon"></div>
+                  <p>Edit Card</p>
+                </div>
+                <div class="drop-down-menu">
+                  <div class="icon delete-icon"></div>
+                  <p>Delete Card</p>
+                </div>
+              </div>
+            </transition>
             <h4 v-show="!(editMode === element._id)">{{ element.title }}</h4>
             <textarea
               :ref="setItemRef"
@@ -23,13 +38,13 @@
             ></textarea>
           </div>
           <div
-            class="icon write-icon"
-            v-show="!(editMode === element._id)"
-            @click="toggleEditMode(element._id)"
+            class="icon menu-icon"
+            v-show="!(editMode === element._id) && !(menuMode === element._id)"
+            @click="toggleDropDown(element._id)"
           ></div>
           <div
             class="icon close-icon"
-            v-show="editMode === element._id"
+            v-show="editMode === element._id || menuMode === element._id"
             @click="toggleEditMode()"
           ></div>
         </div>
@@ -68,22 +83,31 @@ export default {
     return {
       drag: false,
       editMode: "",
-      itemRefs: {},
+      menuMode: "",
+      textFieldRefs: {},
     };
   },
   methods: {
     setItemRef(el) {
       if (el) {
-        this.itemRefs[el.id] = el;
+        this.textFieldRefs[el.id] = el;
       }
     },
-    toggleEditMode(id="") {
+    toggleDropDown(id = "") {
+      if (this.menuMode === id) {
+        this.menuMode = "";
+      } else {
+        this.menuMode = id;
+      }
+    },
+    toggleEditMode(id = "") {
       this.editMode = id;
       if (id !== "") {
         setInterval(() => {
-          this.itemRefs[id].focus();
+          this.textFieldRefs[id].focus();
         }, 5);
       }
+      this.toggleDropDown();
     },
     newTask(id) {
       this.$emit("newTask", id);
@@ -107,10 +131,10 @@ export default {
     },
   },
   beforeUpdate() {
-    this.itemRefs = {};
+    this.textFieldRefs = {};
   },
   updated() {
-    console.log(this.itemRefs);
+    console.log(this.textFieldRefs);
   },
 };
 </script>
@@ -122,11 +146,73 @@ export default {
   padding: 25px 35px;
   display: flex;
   flex-direction: row;
-  overflow-x:scroll ;
+  overflow-x: scroll;
 }
 
 .handle {
   cursor: pointer;
+}
+
+.title-bar {
+  position: relative;
+}
+
+.drop-down {
+  position: absolute;
+  bottom: -85px;
+  right: 25px;
+  background: white;
+  z-index: 1;
+  box-shadow: 0px 3px 10px #00000028;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.drop-down-menu {
+  display: flex;
+  padding: 15px 15px 10px 15px;
+  justify-content: baseline;
+  transition: 0.15s;
+}
+
+.drop-down-menu:last-of-type {
+  padding: 10px 15px 15px 15px;
+}
+
+.drop-down-menu:hover {
+  background: #eef3f9;
+}
+
+.drop-down-menu .icon {
+  margin: 0px;
+}
+
+.drop-down-menu p {
+  margin-left: 10px;
+  vertical-align: text-bottom;
+  line-height: 20px;
+}
+
+/* // Dropdown Menu Animation */
+
+.dropdown-enter-active{
+  animation: modal 0.15s ease-in;
+}
+
+.dropdown-leave-active {
+  animation: modal 0.15s ease-in reverse;
+}
+
+@keyframes modal {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) ;
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0px) ;
+  }
 }
 
 .title-holder {
@@ -143,16 +229,45 @@ export default {
   margin-top: 4px;
   margin-bottom: 15px;
   cursor: pointer;
+  transition: 0.3s;
 }
 
-.write-icon {
+.menu-icon {
+  background: url("../assets/icons/menu.png") no-repeat;
+  background-size: 100%;
+  opacity: 0.35;
+  margin-top: 14px;
+  margin-bottom: 5px;
+}
+
+.menu-icon:hover {
+  background: url("../assets/icons/menu_hover.png") no-repeat;
+  background-size: 100%;
+  opacity: 1;
+}
+
+.edit-icon {
   background: url("../assets/icons/write.png") no-repeat;
   background-size: cover;
-  opacity: 0.35;
+  opacity: 0.9;
 }
 
-.write-icon:hover {
+.edit-icon:hover,
+.drop-down-menu:hover .edit-icon {
   background: url("../assets/icons/write_hover.png") no-repeat;
+  background-size: cover;
+  opacity: 1;
+}
+
+.delete-icon {
+  background: url("../assets/icons/delete.png") no-repeat;
+  background-size: cover;
+  opacity: 0.9;
+}
+
+.delete-icon:hover,
+.drop-down-menu:hover .delete-icon {
+  background: url("../assets/icons/delete_hover.png") no-repeat;
   background-size: cover;
   opacity: 1;
 }
@@ -244,8 +359,8 @@ textarea {
 .sortable-ghost {
   opacity: 0;
 }
-@media screen and (max-width:500px){
-  .row{
+@media screen and (max-width: 500px) {
+  .row {
     min-height: calc(100vh - 285px);
   }
 }

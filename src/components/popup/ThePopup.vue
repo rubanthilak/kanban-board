@@ -36,7 +36,7 @@ export default {
   width: 100vw;
   top: 0;
   left: 0;
-  z-index: 9;
+  z-index: 9999;
 }
 
 h1 {
@@ -45,7 +45,7 @@ h1 {
 }
 
 dialog {
-  z-index: 10;
+  z-index: 99999;
   position: absolute;
   top: 0;
   bottom: 0;
