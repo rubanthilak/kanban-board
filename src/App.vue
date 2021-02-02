@@ -1,5 +1,6 @@
 <template>
   <new-card-popup :open="currentPopup === 'new-card-popup'"></new-card-popup>
+  <delete-card-popup :open="currentPopup === 'delete-card-popup'"></delete-card-popup>
   <new-task-popup :open="currentPopup === 'new-task-popup'"></new-task-popup>
   <view-task-popup
     :open="currentPopup === 'view-task-popup'"
@@ -9,6 +10,7 @@
   <main-board
     @new-task="openPopup('new-task-popup', $event)"
     @view-task="openPopup('view-task-popup', $event)"
+    @delete-card="openPopup('delete-card-popup', $event)"
     @sync-data="syncData"
   ></main-board>
 </template>
@@ -22,6 +24,7 @@ export default {
       listArray: this.listArray,
       //methods
       createNewCard: this.createNewCard,
+      deleteCard: this.deleteCard,
       createNewTask: this.createNewTask,
       updateTaskDetails: this.updateTaskDetails,
       openPopup: this.openPopup,
@@ -31,6 +34,7 @@ export default {
       //params for popup
       currentTaskId: this.currentTaskId,
       addToCardId: this.addToCardId,
+      deleteCardId: this.deleteCardId
     };
   },
   data() {
@@ -39,6 +43,7 @@ export default {
       addToCardId: null,
       currentPopup: null,
       listArray: [],
+      deleteCardId: null
     };
   },
   methods: {
@@ -47,6 +52,8 @@ export default {
         this.addToCardId = params;
       } else if (popup === "view-task-popup") {
         this.currentTaskId = params;
+      } else if (popup === "delete-card-popup") {
+        this.deleteCardId = params;
       }
       this.currentPopup = popup;
     },
@@ -60,6 +67,11 @@ export default {
         value: [],
       };
       await db.addCard(temp);
+      this.closePopup();
+    },
+    async deleteCard(){
+      await db.removeCard(this.deleteCardId);
+      await this.fetchData();
       this.closePopup();
     },
     async createNewTask(title, des) {

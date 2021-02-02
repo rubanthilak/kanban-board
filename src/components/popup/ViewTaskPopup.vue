@@ -1,6 +1,6 @@
 <template>
   <the-popup
-    @close="closePopup"
+    @close="close"
     :open="open"
   >
     <template #header>
@@ -19,7 +19,7 @@
     </template>
     <template #actions>
       <button class="update-btn" @click="ValidateNewTask">Update</button>
-      <button class="close-btn" @click="closePopup">Close</button>
+      <button class="close-btn" @click="close">Close</button>
     </template>
   </the-popup>
 </template>
@@ -47,7 +47,12 @@ export default {
           _id: this.newTaskId,
         };
         this.updateTaskDetails(temp);
+        this.showError = false;
       }
+    },
+    close(){
+      this.showError = false;
+      this.closePopup();
     }
   },
   beforeUpdate(){
@@ -110,11 +115,7 @@ button {
 }
 
 .close-btn {
-  color: #f53a53;
-  background: white;
-  box-shadow: none;
-  transition: 0.3s;
-  padding: 0px;
+  background: #f53a53;
 }
 
 </style>
