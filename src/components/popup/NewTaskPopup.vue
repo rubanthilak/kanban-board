@@ -1,5 +1,5 @@
 <template>
-  <the-popup :title="'New Task'" @close="closePopup" :open="open">
+  <the-popup :title="'New Task'" @close="close" :open="open">
     <template #default>
       <input type="text" v-model="newTaskTitle" placeholder="Title" />
       <textarea
@@ -10,8 +10,8 @@
       <p class="error-text" v-show="showError">* All Fields Required 👿</p>
     </template>
     <template #actions>
-      <button class="add-btn" @click="ValidateNewTask">Add</button>
-      <button class="close-btn" @click="closePopup">Cancel</button>
+      <button class="add-btn" @click="ValidateNewTask">Create</button>
+      <button class="close-btn" @click="close">Cancel</button>
     </template>
   </the-popup>
 </template>
@@ -39,6 +39,10 @@ export default {
         }, 100);
       }
     },
+    close(){
+      this.showError = false;
+      this.closePopup();
+    }
   },
 };
 </script>
@@ -83,10 +87,6 @@ button {
 }
 
 .close-btn {
-  color: #f53a53;
-  background: white;
-  box-shadow: none;
-  transition: 0.3s;
-  padding: 0px;
+  background: #f53a53;
 }
 </style>

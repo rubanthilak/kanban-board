@@ -54,7 +54,7 @@ dialog {
   margin: auto auto;
   border: none;
   font-family: "Circular Std Book";
-  min-width: 400px;
+  min-width: 300px;
   padding: 25px;
   border-radius: 10px;
 }

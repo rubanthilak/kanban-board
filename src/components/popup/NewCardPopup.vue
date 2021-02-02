@@ -77,9 +77,6 @@ button {
 }
 
 .close-btn {
-  color: #f53a53;
-  background: white;
-  box-shadow: none;
-  padding: 0px;
+  background: #f53a53;
 }
 </style>

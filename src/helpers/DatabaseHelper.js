@@ -32,23 +32,30 @@ export default {
         list: board.list
     });
   },
-  removeCard: async function(){
-
+  removeCard: async function(id){
+    var board  = await db.get("boardlist");
+    const index = board.list.findIndex((b) => b._id === id);
+    board.list.splice(index,1);
+    await db.put({
+      _id:"boardlist",
+      _rev:board._rev,
+      list: board.list
+    });
   },
   updateCard: async function(){
 
   },
   addTask: async function(id,task){
-    var board  = await db.get("boardlist")
-    board.list.forEach(board => {
+    var boards  = await db.get("boardlist")
+    boards.list.forEach(board => {
         if(board._id === id){
             board.value.push(task);
         }
     });
     await db.put({
         _id:"boardlist",
-        _rev:board._rev,
-        list: board.list
+        _rev:boards._rev,
+        list: boards.list
     });
   },
   removeTask: async function(){

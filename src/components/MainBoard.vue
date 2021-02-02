@@ -22,7 +22,7 @@
                   <div class="icon edit-icon"></div>
                   <p>Edit Card</p>
                 </div>
-                <div class="drop-down-menu">
+                <div class="drop-down-menu" @click="deleteCard(element._id)">
                   <div class="icon delete-icon"></div>
                   <p>Delete Card</p>
                 </div>
@@ -49,6 +49,7 @@
           ></div>
         </div>
         <div class="card">
+          <p v-if="element.value.length === 0" style="color:gray;text-align:center;font-size:14px;">Drop your tasks here 🔥</p>
           <draggable
             v-model="element.value"
             item-key="id"
@@ -59,7 +60,10 @@
           >
             <template #item="{ element }">
               <div class="list-item" @click="viewTask(element._id)">
-                <p>{{ resizeNameLength(element.name) }}</p>
+                <p>{{ resizeNameLength(element.name,25) }}</p>
+                <div class="desc-text">
+                  <p>{{ resizeNameLength(element.description,100)}}</p>
+                </div>
               </div>
             </template>
           </draggable>
@@ -115,9 +119,13 @@ export default {
     viewTask(id) {
       this.$emit("viewTask", id);
     },
-    resizeNameLength(name) {
-      if (name.length > 70) {
-        return name.substring(0, 70) + "...";
+    deleteCard(id) {
+      this.$emit("deleteCard", id);
+      this.toggleDropDown();
+    },
+    resizeNameLength(name,size) {
+      if (name.length > size) {
+        return name.substring(0, size) + "...";
       }
       return name;
     },
@@ -140,6 +148,7 @@ export default {
 </script>
 
 <style scoped>
+
 .row {
   width: auto;
   min-height: calc(100vh - 230px);
@@ -323,7 +332,7 @@ textarea {
 }
 
 .list-item {
-  padding: 10px 15px;
+  padding: 15px;
   margin: 0px 0px 15px 0px;
   box-shadow: 0px 0px 10px #b8b8b82a;
   cursor: pointer;
@@ -331,6 +340,20 @@ textarea {
   color: black;
   word-wrap: break-word;
   border-radius: 5px;
+}
+
+.list-item p{
+  font-weight: 700;
+}
+
+.desc-text{
+  margin-top: 10px;
+  color: gray;
+}
+
+.desc-text p {
+  font-size: 14px;
+  font-weight: 400;
 }
 
 .add-card-button {
