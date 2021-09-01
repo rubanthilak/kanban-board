@@ -40,7 +40,7 @@ export default {
 }
 
 h1 {
-  font-family: "Circular Std Bold";
+  font-family: font-bold;
   margin: 0px;
 }
 
@@ -53,7 +53,7 @@ dialog {
   right: 0;
   margin: auto auto;
   border: none;
-  font-family: "Circular Std Book";
+  font-family: font-regular;
   min-width: 300px;
   padding: 25px;
   border-radius: 10px;

@@ -57,24 +57,28 @@ input {
   width: 400px;
   padding: 10px 10px;
   margin: 20px 0px 0px 0px;
-  font-family: "Circular Std Book";
+  font-family: font-regular;
   font-size: 16px;
   display: block;
+   border: 2px solid #00000070;
+  border-radius: 5px;
 }
 textarea {
-  font-family: "Circular Std Book";
+  font-family: font-regular;
   width: 400px;
   padding: 10px 11px;
   margin: 20px 0px 0px 0px;
   font-size: 16px;
   resize: none;
+  border: 2px solid #00000070;
+  border-radius: 5px;
 }
 button {
   margin-top: 25px;
   margin-right: 15px;
   padding: 10px 30px;
   font-size: 16px;
-  font-family: "Circular Std Medium";
+  font-family: font-bold;
   color: white;
   border: none;
   border-radius: 5px;

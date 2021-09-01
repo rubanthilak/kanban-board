@@ -370,6 +370,7 @@ textarea {
   margin: 0px;
   text-align: center;
   color: #2674fa;
+  font-family:font-bold;
 }
 
 .drag,

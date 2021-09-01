@@ -80,13 +80,13 @@ export default {
 
 input {
   width: 400px;
-  font-family: "Circular Std Bold";
+  font-family: font-bold;
   font-size: 32px;
   display: block;
   border: none;
 }
 textarea {
-  font-family: "Circular Std Book";
+  font-family: font-regular;
   width: 400px;
   padding: 10px 11px;
   margin: 0px;
@@ -100,7 +100,7 @@ textarea {
 button {
   padding: 10px 30px;
   font-size: 16px;
-  font-family: "Circular Std Medium";
+  font-family: font-regular;
   color: white;
   border: none;
   border-radius: 5px;
