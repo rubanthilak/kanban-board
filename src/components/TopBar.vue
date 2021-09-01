@@ -61,12 +61,12 @@ export default {
   margin: auto 0px;
 }
 .month-text{
-  font-family: "Proxima Nova Alt";
+  font-family: font-bold;
   font-weight: bold;
   font-size: 26px;
 }
  .year-text{
-   font-family: "Circular Std Bold";
+   font-family:font-bold;
   font-size: 22px;
   color: gray;
  }
@@ -76,7 +76,7 @@ p{
 h1{
   margin: 0px;
   font-size: 28px;
-  font-family: "Proxima Nova";
+  font-family: font-bold;
   border: solid 3px black;
   border-radius: 10px;
   padding: 10px 14px;
@@ -88,7 +88,7 @@ button{
   border-radius: 5px;
   background: #2674fa;
   color: white;
-  font-family: "Circular Std Bold";
+  font-family: font-bold;
   font-size: 18px;
   vertical-align: text-top;
   cursor: pointer;

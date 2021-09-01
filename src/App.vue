@@ -112,22 +112,40 @@ export default {
 </script>
 
 <style>
+
+@font-face {
+  font-family: font-regular;
+  src: url(./assets/font_regular.ttf);
+}
+
+@font-face {
+  font-family: font-bold;
+  src: url(./assets/font_bold.ttf);
+}
+
 #app {
-  font-family: "Circular Std Book", serif, sans-serif;
+  font-family: font-regular, serif, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 body {
   margin: 0px;
   padding: 0px;
   background: #ffffff;
   overflow-x: hidden;
 }
+
+p{
+  font-family: font-regular;
+}
+
 h1 {
-  font-family: "Circular Std Bold";
+  font-family: font-bold;
   margin-left: 25px;
   margin-bottom: 0px;
 }
+
 .flex{
   display: flex;
 }

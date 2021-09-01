@@ -203,7 +203,6 @@ export default {
 }
 
 /* // Dropdown Menu Animation */
-
 .dropdown-enter-active{
   animation: modal 0.15s ease-in;
 }
@@ -304,13 +303,13 @@ h4 {
   margin: 0px;
   line-height: 28px;
   font-size: 18px;
-  font-family: "Circular Std Bold";
+  font-family: font-bold;
 }
 
 textarea {
   line-height: 24px;
   font-size: 20px;
-  font-family: "Circular Std Bold";
+  font-family: font-bold;
   padding: 2px 0px;
   margin: 0px;
   width: 100%;
@@ -361,7 +360,7 @@ textarea {
   background: #e5ebf7;
   color: #e5ebf7;
   border-radius: 5px;
-  font-family: "Circular Std Bold";
+  font-family:font-bold;
   cursor: pointer;
   text-align: center;
   margin-top: 15px;
