@@ -97,10 +97,11 @@ textarea {
   border-radius: 5px;
 
 }
+
 button {
   padding: 10px 30px;
   font-size: 16px;
-  font-family: font-regular;
+  font-family: font-bold;
   color: white;
   border: none;
   border-radius: 5px;
