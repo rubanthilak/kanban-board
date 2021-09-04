@@ -14,14 +14,15 @@
 <table>
 <tbody>
 <td align="center">
+<p></p>
 <img width="2000" height="0"><br>
 Status: <b>Public Beta 🎉</b><br>
 <sub> Click the below link to download the application.</sub><br>
-<img width="1000" height="0"><br>
+<p></p>
   <a href="https://github.com/Rubanthilak/kanban-board/releases/download/v1.0/Kanban.Board.Setup.1.0.0.exe">
     <img src="https://img.shields.io/badge/-Download-green?style=for-the-badge"/>
     </a>
-<img width="2000" height="0"><br>
+<p></p>
 </td>
 </tbody>
 </table>
