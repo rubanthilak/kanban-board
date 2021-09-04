@@ -1,4 +1,3 @@
-# Kanban Board
 
 <p align="center">
 <img src="./build/icons/128x128.png" alt="icon" />
@@ -14,27 +13,34 @@
 <table>
 <tbody>
 <td align="center">
-<p></p>
 <img width="2000" height="0"><br>
 Status: <b>Public Beta 🎉</b><br>
-<sub> Click the below link to download the application.</sub><br>
+<sub> Made possible by Vue & Electron.</sub><br>
 <p></p>
   <a href="https://github.com/Rubanthilak/kanban-board/releases/download/v1.0/Kanban.Board.Setup.1.0.0.exe">
     <img src="https://img.shields.io/badge/-Download-green?style=for-the-badge"/>
     </a>
-<p></p>
+<img width="2000" height="0"><br>
 </td>
 </tbody>
 </table>
 
 </p>
 
-<div style="text-align:center;">
-  
+## Description
+
+<div>
+  <p>
+    A Kanban App created inorder to keep tack of daily tasks. I love to learn by building real-time products that can be shipped to the user. So, here is the simple kanban board that runs locally in your system.
+  </p>
+  <p>
+    If you are developer and love to experiment with this application, please do follow the below steps to setup the project in you machine.
+  </p>
 </div>
 
 ## Project setup
 
+### Clone the repository using git clone command and then
 ```
 npm install
 ```
@@ -50,9 +56,6 @@ npm run serve
 ```
 npm run build
 ```
+## License
 
-### Lints and fixes files
-
-```
-npm run lint
-```
+MIT License © 2021 [Ruban Thilak](https://github.com/rubanthilak)
