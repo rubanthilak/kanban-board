@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     validateCardName() {
-      if (this.newCardName === "") {
+      if (this.newCardName.trim() === "") {
         this.showError = true;
       } else {
         this.createNewCard(

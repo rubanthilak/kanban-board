@@ -3,7 +3,7 @@
     :list="listArray"
     item-key="_id"
     handle=".handle"
-    class="row"
+    class="row custom-scroll"
     ghost-class="ghost"
     drag-class="drag"
     :force-fallback="true"
@@ -25,24 +25,26 @@
           <dropdown-menu :ref="element._id" @delete="deleteCard(element._id)" @edit="toggleEditMode(element._id)"></dropdown-menu>
         </div>
         <div class="card">
-          <p v-if="element.value.length === 0" style="color:gray;text-align:center;font-size:14px;">Drop your tasks here 🔥</p>
-          <draggable
-            v-model="element.value"
-            item-key="id"
-            group="card"
-            ghost-class="ghost"
-            drag-class="drag"
-            @end="$emit('syncData')"
-          >
-            <template #item="{ element }">
-              <div class="list-item" @click="viewTask(element._id)">
-                <p>{{ resizeNameLength(element.name,25) }}</p>
-                <div class="desc-text">
-                  <p>{{ resizeNameLength(element.description,100)}}</p>
+          <p v-if="element.value.length === 0" style="color:gray;text-align:center;font-size:14px;margin:20px;margin-bottom:0px;">Drop your tasks here 🔥</p>
+          <div class="custom-scroll" style="max-height:calc(100vh - 395px);overflow:auto;padding: 20px;padding-bottom:0px;">
+            <draggable
+              v-model="element.value"
+              item-key="id"
+              group="card"
+              ghost-class="ghost"
+              drag-class="drag"
+              @end="$emit('syncData')"
+              >
+              <template #item="{ element }">
+                <div class="list-item" @click="viewTask(element._id)">
+                  <p>{{ resizeNameLength(element.name,25) }}</p>
+                  <div class="desc-text">
+                    <p>{{ resizeNameLength(element.description,100)}}</p>
+                  </div>
                 </div>
-              </div>
-            </template>
-          </draggable>
+              </template>
+            </draggable>
+          </div>
           <div @click="newTask(element._id)" class="add-card-button">
             <p><span>+</span> Add Task</p>
           </div>
@@ -97,7 +99,7 @@ export default {
       return name;
     },
     async validateCardDetails(id, title) {
-      if (title === "") {
+      if (title.trim() === "") {
         this.fetchData();
       } else {
         this.syncData();
@@ -115,6 +117,29 @@ export default {
 </script>
 
 <style scoped>
+
+/* width */
+.custom-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 10px;
+}
+
+/* Track */
+.custom-scroll::-webkit-scrollbar-track {
+  background: #dbdbdb9d; 
+  border-radius: 25px;
+}
+ 
+/* Handle */
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgb(182, 182, 182); 
+  border-radius: 25px;
+}
+
+/* Handle on hover */
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgb(128, 128, 128); 
+}
 
 .row {
   width: auto;
@@ -297,12 +322,12 @@ h4 {
 }
 
 .card {
-  padding: 20px;
+  /* padding: 20px; */
   background: #f4f7fd;
   margin-right: 25px;
-  margin-bottom: 25px;
-  min-width: 270px;
-  max-width: 270px;
+  /* margin-bottom: 25px; */
+  min-width: 310px;
+  max-width: 310px;
   float: left;
   transition: 0.5s;
   border-radius: 10px;
@@ -341,7 +366,8 @@ h4 {
   font-family:font-bold;
   cursor: pointer;
   text-align: center;
-  margin-top: 15px;
+  margin: 20px;
+  margin-top:0px;
 }
 
 .add-card-button p {

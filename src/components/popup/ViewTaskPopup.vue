@@ -19,14 +19,14 @@
     </template>
     <template #actions>
       <button class="update-btn" @click="ValidateNewTask">Update</button>
-      <button class="close-btn" @click="close">Close</button>
+      <button class="close-btn" @click="deleteTrigger">Delete</button>
     </template>
   </the-popup>
 </template>
 
 <script>
 export default {
-  inject: ["closePopup", "updateTaskDetails", "listArray"],
+  inject: ["closePopup", "updateTaskDetails", "listArray","deleteTask"],
   props: ["open", "currentTaskId"],
   data() {
     return {
@@ -38,12 +38,12 @@ export default {
   },
   methods: {
     ValidateNewTask() {
-      if (this.newTaskTitle === "" || this.newTaskDesc === "") {
+      if (this.newTaskTitle.trim() === "" || this.newTaskDesc.trim() === "") {
         this.showError = true;
       } else {
         const temp = {
-          name: this.newTaskTitle,
-          description: this.newTaskDesc,
+          name: this.newTaskTitle.trim(),
+          description: this.newTaskDesc.trim(),
           _id: this.newTaskId,
         };
         this.updateTaskDetails(temp);
@@ -53,6 +53,10 @@ export default {
     close(){
       this.showError = false;
       this.closePopup();
+    },
+    deleteTrigger(){
+       this.showError = false;
+       this.deleteTask(this.currentTaskId);
     }
   },
   beforeUpdate(){

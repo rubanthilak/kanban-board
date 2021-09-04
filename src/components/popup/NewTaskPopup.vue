@@ -29,10 +29,11 @@ export default {
   },
   methods: {
     ValidateNewTask() {
-      if (this.newTaskTitle === "" || this.newTaskDesc === "") {
+      if (this.newTaskTitle.trim() === "" || this.newTaskDesc.trim() === "") {
         this.showError = true;
       } else {
-        this.createNewTask(this.newTaskTitle, this.newTaskDesc);
+        this.showError = false;
+        this.createNewTask(this.newTaskTitle.trim(), this.newTaskDesc.trim());
         setTimeout(() => {
           this.newTaskTitle = "";
           this.newTaskDesc = "";
