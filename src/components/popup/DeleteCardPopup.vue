@@ -37,7 +37,7 @@ button {
   margin-right: 15px;
   padding: 10px 30px;
   font-size: 16px;
-  font-family: "Circular Std Medium";
+  font-family: font-bold;
   color: white;
   border: none;
   border-radius: 5px;

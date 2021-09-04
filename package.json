@@ -1,7 +1,14 @@
 {
-  "name": "kanban",
-  "version": "0.1.0",
+  "name": "kanban-board",
+  "version": "1.0.0",
   "private": true,
+  "description": "Simple Kanban that flipping works.",
+  "author": {
+    "name": "Ruban Thilak",
+    "email": "rubanthilak@zoho.com",
+    "url": "https://rubanthilak.github.io"
+  },
+  "homepage": "https://rubanthilak.github.io",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",

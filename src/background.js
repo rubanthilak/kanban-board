@@ -23,7 +23,8 @@ async function createWindow() {
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION
     },
-    icon: path.join(__static, 'icon.png')
+    icon: path.join(__static, 'icon.png'),
+    show: false 
   })
 
   win.removeMenu();
@@ -36,6 +37,9 @@ async function createWindow() {
     createProtocol('app')
     // Load the index.html when not in development
     win.loadURL('app://./index.html')
+    win.once('ready-to-show', function() {
+      win.show();
+  });
   }
 }
 

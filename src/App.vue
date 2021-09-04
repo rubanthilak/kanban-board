@@ -1,6 +1,8 @@
 <template>
   <new-card-popup :open="currentPopup === 'new-card-popup'"></new-card-popup>
-  <delete-card-popup :open="currentPopup === 'delete-card-popup'"></delete-card-popup>
+  <delete-card-popup
+    :open="currentPopup === 'delete-card-popup'"
+  ></delete-card-popup>
   <new-task-popup :open="currentPopup === 'new-task-popup'"></new-task-popup>
   <view-task-popup
     :open="currentPopup === 'view-task-popup'"
@@ -34,7 +36,8 @@ export default {
       //params for popup
       currentTaskId: this.currentTaskId,
       addToCardId: this.addToCardId,
-      deleteCardId: this.deleteCardId
+      deleteCardId: this.deleteCardId,
+      deleteTask: this.deleteTask
     };
   },
   data() {
@@ -43,7 +46,7 @@ export default {
       addToCardId: null,
       currentPopup: null,
       listArray: [],
-      deleteCardId: null
+      deleteCardId: null,
     };
   },
   methods: {
@@ -69,7 +72,7 @@ export default {
       await db.addCard(temp);
       this.closePopup();
     },
-    async deleteCard(){
+    async deleteCard() {
       await db.removeCard(this.deleteCardId);
       await this.fetchData();
       this.closePopup();
@@ -88,6 +91,16 @@ export default {
         const index = card.value.findIndex((task) => task._id === params._id);
         if (index !== -1) {
           card.value[index] = params;
+        }
+      });
+      await db.updateBoard(this.listArray);
+      this.closePopup();
+    },
+    async deleteTask(id) {
+      this.listArray.forEach((card) => {
+        const index = card.value.findIndex((task) => task._id === id);
+        if (index !== -1) {
+          card.value.splice(index, 1);
         }
       });
       await db.updateBoard(this.listArray);
@@ -112,23 +125,40 @@ export default {
 </script>
 
 <style>
+@font-face {
+  font-family: font-regular;
+  src: url(./assets/font_regular.ttf);
+}
+
+@font-face {
+  font-family: font-bold;
+  src: url(./assets/font_bold.ttf);
+}
+
 #app {
-  font-family: "Circular Std Book", serif, sans-serif;
+  font-family: font-regular, serif, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
 body {
   margin: 0px;
   padding: 0px;
   background: #ffffff;
   overflow-x: hidden;
 }
+
+p {
+  font-family: font-regular;
+}
+
 h1 {
-  font-family: "Circular Std Bold";
+  font-family: font-bold;
   margin-left: 25px;
   margin-bottom: 0px;
 }
-.flex{
+
+.flex {
   display: flex;
 }
 </style>

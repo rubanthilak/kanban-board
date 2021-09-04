@@ -3,7 +3,7 @@
     :list="listArray"
     item-key="_id"
     handle=".handle"
-    class="row"
+    class="row custom-scroll"
     ghost-class="ghost"
     drag-class="drag"
     :force-fallback="true"
@@ -12,22 +12,7 @@
     <template #item="{ element }">
       <div class="board">
         <div class="flex title-bar">
-          <div class="handle title-holder">
-            <transition name="dropdown">
-              <div class="drop-down" v-if="menuMode === element._id">
-                <div
-                  class="drop-down-menu"
-                  @click="toggleEditMode(element._id)"
-                >
-                  <div class="icon edit-icon"></div>
-                  <p>Edit Card</p>
-                </div>
-                <div class="drop-down-menu" @click="deleteCard(element._id)">
-                  <div class="icon delete-icon"></div>
-                  <p>Delete Card</p>
-                </div>
-              </div>
-            </transition>
+          <div class="handle title-holder" >
             <h4 v-show="!(editMode === element._id)">{{ element.title }}</h4>
             <textarea
               :ref="setItemRef"
@@ -37,36 +22,29 @@
               @blur="validateCardDetails(element._id, element.title)"
             ></textarea>
           </div>
-          <div
-            class="icon menu-icon"
-            v-show="!(editMode === element._id) && !(menuMode === element._id)"
-            @click="toggleDropDown(element._id)"
-          ></div>
-          <div
-            class="icon close-icon"
-            v-show="editMode === element._id || menuMode === element._id"
-            @click="toggleEditMode()"
-          ></div>
+          <dropdown-menu :ref="element._id" @delete="deleteCard(element._id)" @edit="toggleEditMode(element._id)"></dropdown-menu>
         </div>
         <div class="card">
-          <p v-if="element.value.length === 0" style="color:gray;text-align:center;font-size:14px;">Drop your tasks here 🔥</p>
-          <draggable
-            v-model="element.value"
-            item-key="id"
-            group="card"
-            ghost-class="ghost"
-            drag-class="drag"
-            @end="$emit('syncData')"
-          >
-            <template #item="{ element }">
-              <div class="list-item" @click="viewTask(element._id)">
-                <p>{{ resizeNameLength(element.name,25) }}</p>
-                <div class="desc-text">
-                  <p>{{ resizeNameLength(element.description,100)}}</p>
+          <p v-if="element.value.length === 0" style="color:gray;text-align:center;font-size:14px;margin:20px;margin-bottom:0px;">Drop your tasks here 🔥</p>
+          <div class="custom-scroll" style="max-height:calc(100vh - 395px);overflow:auto;padding: 20px;padding-bottom:0px;">
+            <draggable
+              v-model="element.value"
+              item-key="id"
+              group="card"
+              ghost-class="ghost"
+              drag-class="drag"
+              @end="$emit('syncData')"
+              >
+              <template #item="{ element }">
+                <div class="list-item" @click="viewTask(element._id)">
+                  <p>{{ resizeNameLength(element.name,25) }}</p>
+                  <div class="desc-text">
+                    <p>{{ resizeNameLength(element.description,100)}}</p>
+                  </div>
                 </div>
-              </div>
-            </template>
-          </draggable>
+              </template>
+            </draggable>
+          </div>
           <div @click="newTask(element._id)" class="add-card-button">
             <p><span>+</span> Add Task</p>
           </div>
@@ -97,13 +75,6 @@ export default {
         this.textFieldRefs[el.id] = el;
       }
     },
-    toggleDropDown(id = "") {
-      if (this.menuMode === id) {
-        this.menuMode = "";
-      } else {
-        this.menuMode = id;
-      }
-    },
     toggleEditMode(id = "") {
       this.editMode = id;
       if (id !== "") {
@@ -111,7 +82,6 @@ export default {
           this.textFieldRefs[id].focus();
         }, 5);
       }
-      this.toggleDropDown();
     },
     newTask(id) {
       this.$emit("newTask", id);
@@ -121,7 +91,6 @@ export default {
     },
     deleteCard(id) {
       this.$emit("deleteCard", id);
-      this.toggleDropDown();
     },
     resizeNameLength(name,size) {
       if (name.length > size) {
@@ -130,7 +99,7 @@ export default {
       return name;
     },
     async validateCardDetails(id, title) {
-      if (title === "") {
+      if (title.trim() === "") {
         this.fetchData();
       } else {
         this.syncData();
@@ -148,6 +117,29 @@ export default {
 </script>
 
 <style scoped>
+
+/* width */
+.custom-scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 10px;
+}
+
+/* Track */
+.custom-scroll::-webkit-scrollbar-track {
+  background: #dbdbdb9d; 
+  border-radius: 25px;
+}
+ 
+/* Handle */
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgb(182, 182, 182); 
+  border-radius: 25px;
+}
+
+/* Handle on hover */
+.custom-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgb(128, 128, 128); 
+}
 
 .row {
   width: auto;
@@ -200,10 +192,10 @@ export default {
   margin-left: 10px;
   vertical-align: text-bottom;
   line-height: 20px;
+  font-family:font-bold;
 }
 
 /* // Dropdown Menu Animation */
-
 .dropdown-enter-active{
   animation: modal 0.15s ease-in;
 }
@@ -227,13 +219,35 @@ export default {
 .title-holder {
   width: 275px;
   margin-right: 5px;
-  margin-bottom: 15px;
+  /* max-height: 24px; */
+}
+
+.title-holder h4{
+  width: 90%;
+  text-overflow: ellipsis;
+  overflow: hidden !important; 
+  white-space: nowrap;
+  display: inline-block;
+  border: 2px solid transparent;
+}
+
+.title-holder textarea {
+  line-height: 24px;
+  font-size: 18px;
+  font-family: font-bold;
+  padding: 2px 0px;
+  margin: 0px;
+  width: 100%;
   max-height: 24px;
+  resize: none;
+  /* border: none; */
 }
 
 .icon {
   height: 20px;
   width: 20px;
+  max-height: 20px;
+  max-width: 20px;
   background: black;
   margin-top: 4px;
   margin-bottom: 15px;
@@ -304,28 +318,16 @@ h4 {
   margin: 0px;
   line-height: 28px;
   font-size: 18px;
-  font-family: "Circular Std Bold";
-}
-
-textarea {
-  line-height: 24px;
-  font-size: 20px;
-  font-family: "Circular Std Bold";
-  padding: 2px 0px;
-  margin: 0px;
-  width: 100%;
-  height: 24px;
-  resize: none;
-  /* border: none; */
+  font-family: font-bold;
 }
 
 .card {
-  padding: 20px;
+  /* padding: 20px; */
   background: #f4f7fd;
   margin-right: 25px;
-  margin-bottom: 25px;
-  min-width: 270px;
-  max-width: 270px;
+  /* margin-bottom: 25px; */
+  min-width: 310px;
+  max-width: 310px;
   float: left;
   transition: 0.5s;
   border-radius: 10px;
@@ -361,16 +363,18 @@ textarea {
   background: #e5ebf7;
   color: #e5ebf7;
   border-radius: 5px;
-  font-family: "Circular Std Bold";
+  font-family:font-bold;
   cursor: pointer;
   text-align: center;
-  margin-top: 15px;
+  margin: 20px;
+  margin-top:0px;
 }
 
 .add-card-button p {
   margin: 0px;
   text-align: center;
   color: #2674fa;
+  font-family:font-bold;
 }
 
 .drag,

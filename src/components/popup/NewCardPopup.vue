@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     validateCardName() {
-      if (this.newCardName === "") {
+      if (this.newCardName.trim() === "") {
         this.showError = true;
       } else {
         this.createNewCard(
@@ -44,19 +44,24 @@ export default {
 </script>
 
 <style scoped>
+
 .error-text {
   color: red;
   margin: 5px 0px 0px 0px;
 }
+
 p {
   margin: 25px 0px 0px 0px;
 }
+
 input {
   width: 400px;
   padding: 10px 10px;
   margin: 20px 0px 0px 0px;
-  font-family: "Circular Std Book";
+  font-family: font-regular;
   font-size: 16px;
+  border: 2px solid #00000070;
+  border-radius: 5px;
 }
 
 button {
@@ -64,7 +69,7 @@ button {
   margin-right: 15px;
   padding: 10px 30px;
   font-size: 16px;
-  font-family: "Circular Std Medium";
+  font-family: font-bold;
   color: white;
   border: none;
   border-radius: 5px;
