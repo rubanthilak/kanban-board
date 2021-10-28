@@ -6,11 +6,11 @@
 <p align="center">Simple <b>Kanban</b> App that flipping works.</p>
 
 <p align="center">
-<img src="./Screenshot.png" alt="icon" />
+    <img src="https://img.shields.io/badge/Release-v1.0-orange?style=flat-square"/>
 </p>
 
 <p align="center">
-    <img src="https://img.shields.io/badge/Release-v1.0-orange?style=flat-square"/>
+<img src="./Screenshot.png" alt="icon" />
 </p>
 
 <p align="center">
